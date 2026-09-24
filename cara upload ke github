@@ -1,0 +1,16 @@
+buat repository baru dengan access public
+buka terminal di proyek yang ingin di deploy
+
+konfigurasi di terminal untuk proses upload ke github repository
+git init
+git add .
+git commit -m "my website"
+git branch -M main
+git remote add origin -- link github repository --
+git push -u origin main
+
+cara auto update proyek jika dikerjakan di beberapa laptop ( real code refresh)
+buka terminal di proyek anda contoh saya menggunakan vscode
+
+konfigurasi
+git pull origin main
