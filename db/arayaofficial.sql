@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 08, 2026 at 07:16 PM
+-- Generation Time: Sep 25, 2026 at 01:09 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -38,6 +38,15 @@ CREATE TABLE `customer_vouchers` (
   `tanggal_pakai` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
+--
+-- Dumping data for table `customer_vouchers`
+--
+
+INSERT INTO `customer_vouchers` (`id`, `nama_pelanggan`, `nomor_whatsapp`, `promo_id`, `kode_voucher`, `status_pakai`, `tanggal_klaim`, `tanggal_pakai`) VALUES
+(5, 'Rommy Gunawan', '082150719057', 2, 'VIP-C57D2', 'Belum Digunakan', '2026-09-23 19:06:20', NULL),
+(6, 'Zuraida', '082150719057', 3, 'PMR-494FE', 'Belum Digunakan', '2026-09-23 19:10:09', NULL),
+(7, 'haf', '085750755502', 2, 'VIP-B6747', 'Belum Digunakan', '2026-09-24 21:12:01', NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -46,6 +55,7 @@ CREATE TABLE `customer_vouchers` (
 
 CREATE TABLE `daftar_harga` (
   `id_harga` int(11) NOT NULL,
+  `cabang` varchar(50) NOT NULL,
   `p_paket` varchar(50) NOT NULL,
   `durasi` varchar(50) NOT NULL,
   `daf_harga` varchar(100) NOT NULL
@@ -55,25 +65,31 @@ CREATE TABLE `daftar_harga` (
 -- Dumping data for table `daftar_harga`
 --
 
-INSERT INTO `daftar_harga` (`id_harga`, `p_paket`, `durasi`, `daf_harga`) VALUES
-(1, 'Reguler', '1 Jam', '12000'),
-(2, 'Voucher', '3 Jam', '25000'),
-(3, 'Voucher', '5 jam', '40000'),
-(4, 'Voucher', '10 jam', '75000'),
-(5, 'Vip', '1 Jam', '25000'),
-(6, 'Vip', '2 Jam', '50000'),
-(7, 'Vip', '3 Jam', '75000'),
-(8, 'Vip', '4 Jam', '85000'),
-(9, 'Vip', '5 jam', '100000'),
-(10, 'RENTAL', '12 JAM', '90000'),
-(11, 'RENTAL', '24 JAM', '130000'),
-(13, 'RENTAL', '48 JAM', '200000'),
-(14, 'TV', '12 / 24 JAM', '20000'),
-(15, 'Paket', '3 Jam', '30000'),
-(16, 'Premiere 1', '1 Jam', '45000'),
-(17, 'Premiere 1', '2 Jam', '80000'),
-(18, 'Premiere 2', '1 Jam', '35000'),
-(19, 'Premiere 2', '2 Jam', '60000');
+INSERT INTO `daftar_harga` (`id_harga`, `cabang`, `p_paket`, `durasi`, `daf_harga`) VALUES
+(1, 'Beruntung', 'Reguler', '1 Jam', '12000'),
+(2, 'Beruntung', 'Voucher', '3 Jam', '25000'),
+(3, 'Beruntung', 'Voucher', '5 Jam', '40000'),
+(5, 'Beruntung', 'Vip', '1 Jam', '25000'),
+(6, 'Beruntung', 'Vip', '2 Jam', '50000'),
+(7, 'Beruntung', 'Vip', '3 Jam', '75000'),
+(8, 'Beruntung', 'Vip', '4 Jam', '85000'),
+(9, 'Beruntung', 'Vip', '5 Jam', '100000'),
+(10, 'Beruntung', 'Rental', '12 Jam', '90000'),
+(11, 'Beruntung', 'Rental', '24 Jam', '130000'),
+(13, 'Beruntung', 'Rental', '48 Jam', '200000'),
+(14, 'Beruntung', 'Rental', '48 Jam', '20000'),
+(15, 'Gambut', 'Paket', '3 Jam', '30000'),
+(16, 'Gambut', 'Premiere 1', '1 Jam', '45000'),
+(17, 'Gambut', 'Premiere 1', '2 Jam', '80000'),
+(18, 'Gambut', 'Premiere 2', '1 Jam', '35000'),
+(19, 'Gambut', 'Premiere 2', '2 Jam', '60000'),
+(20, 'Gambut', 'Reguler', '1 Jam', '12000'),
+(21, 'Gambut', 'Vip', '1 Jam', '25000'),
+(22, 'Gambut', 'Vip', '2 Jam', '50000'),
+(23, 'Gambut', 'Vip', '3 Jam', '75000'),
+(24, 'Gambut', 'Vip', '4 Jam', '85000'),
+(25, 'Gambut', 'Vip', '5 Jam', '100000'),
+(26, 'Gambut', 'Voucher', '3 Jam', '30000');
 
 -- --------------------------------------------------------
 
@@ -109,6 +125,7 @@ CREATE TABLE `karyawan` (
   `cabang` varchar(20) NOT NULL,
   `tanggal` varchar(50) NOT NULL,
   `shift` varchar(30) NOT NULL,
+  `tipe_shift` varchar(50) NOT NULL,
   `omset` varchar(100) NOT NULL,
   `operasional` varchar(200) NOT NULL,
   `total_pengeluaran` varchar(100) NOT NULL
@@ -118,10 +135,11 @@ CREATE TABLE `karyawan` (
 -- Dumping data for table `karyawan`
 --
 
-INSERT INTO `karyawan` (`id_karyawan`, `id_user`, `cabang`, `tanggal`, `shift`, `omset`, `operasional`, `total_pengeluaran`) VALUES
-(97, 20, 'Beruntung', '2026-09-01', '2', '600000', 'listrik', '400000'),
-(98, 20, 'Beruntung', '2026-09-02', '2', '450000', 'Jaga malam', '150000'),
-(99, 17, 'Beruntung', '2026-09-09', '1', '500000', '', '0');
+INSERT INTO `karyawan` (`id_karyawan`, `id_user`, `cabang`, `tanggal`, `shift`, `tipe_shift`, `omset`, `operasional`, `total_pengeluaran`) VALUES
+(108, 17, 'Beruntung', '2026-09-10', '2', 'Partner', '600000', 'admin', '10000'),
+(109, 20, 'Beruntung', '2026-09-10', '2', 'Partner', '600000', 'admin', '10000'),
+(110, 17, 'Beruntung', '2026-09-11', '1', 'Single', '350000', '', '0'),
+(111, 20, 'Beruntung', '2026-09-11', '2', 'Single', '600000', '', '0');
 
 -- --------------------------------------------------------
 
@@ -223,10 +241,21 @@ CREATE TABLE `promos` (
   `nama_promo` varchar(100) NOT NULL,
   `kode_prefix` varchar(10) NOT NULL,
   `kuota` int(11) NOT NULL,
+  `harga_normal` varchar(50) NOT NULL,
   `potongan` varchar(50) NOT NULL,
+  `keterangan` text NOT NULL,
+  `best_value` enum('Ya','Tidak') DEFAULT 'Tidak',
   `status` enum('Aktif','Nonaktif') DEFAULT 'Aktif',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Dumping data for table `promos`
+--
+
+INSERT INTO `promos` (`id`, `nama_promo`, `kode_prefix`, `kuota`, `harga_normal`, `potongan`, `keterangan`, `best_value`, `status`, `created_at`) VALUES
+(2, 'Voucher Vip', 'VIP', 0, '50000', '15000', 'Potongan sebesar 15 k\r\nGratis air mineral dan Snack\r\nmendapatkan voucher berbentuk fisik', 'Ya', 'Aktif', '2026-09-23 17:53:14'),
+(3, 'Premiere', 'PMR', 14, '70000', '10000', 'Potongan sebesar Rp.10.000\r\nGratis air mineral dan snack', 'Tidak', 'Aktif', '2026-09-23 17:58:10');
 
 -- --------------------------------------------------------
 
@@ -248,6 +277,13 @@ CREATE TABLE `rental` (
   `id_kurir` int(11) DEFAULT NULL,
   `tgl_selesai` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Dumping data for table `rental`
+--
+
+INSERT INTO `rental` (`id_rental`, `nama_perental`, `durasi_sewa`, `alamat_lengkap`, `jaminan`, `sharelok`, `wa`, `catatan`, `status`, `img`, `id_kurir`, `tgl_selesai`) VALUES
+(8, 'dasfasaassvsd', '24 Jam', 'dsdfdsf', 'ktpef', 'https://www.google.com/maps/dir/?api=1&destination=-3.3530949999999997%2C114.61876', '427', '-', 'Proses', '', 17, NULL);
 
 -- --------------------------------------------------------
 
@@ -320,6 +356,14 @@ CREATE TABLE `timer_billing` (
   `end_time` varchar(50) DEFAULT NULL,
   `is_running` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Dumping data for table `timer_billing`
+--
+
+INSERT INTO `timer_billing` (`id_timer`, `cabang`, `no_meja`, `judul_meja`, `paket`, `time_left`, `end_time`, `is_running`) VALUES
+('T1788902685728', 'beruntung', '1', 'reguler', 3600, 0, '0', 0),
+('T1788902703494', 'gambut', '1', 'reguler nonsmooking', 3600, 0, '0', 0);
 
 -- --------------------------------------------------------
 
@@ -478,13 +522,13 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `customer_vouchers`
 --
 ALTER TABLE `customer_vouchers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `daftar_harga`
 --
 ALTER TABLE `daftar_harga`
-  MODIFY `id_harga` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id_harga` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `feedback_pelanggan`
@@ -496,7 +540,7 @@ ALTER TABLE `feedback_pelanggan`
 -- AUTO_INCREMENT for table `karyawan`
 --
 ALTER TABLE `karyawan`
-  MODIFY `id_karyawan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=100;
+  MODIFY `id_karyawan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=112;
 
 --
 -- AUTO_INCREMENT for table `kat_ruangan`
@@ -520,19 +564,19 @@ ALTER TABLE `pembayaran`
 -- AUTO_INCREMENT for table `pengeluaran`
 --
 ALTER TABLE `pengeluaran`
-  MODIFY `id_pengeluaran` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `id_pengeluaran` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT for table `promos`
 --
 ALTER TABLE `promos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `rental`
 --
 ALTER TABLE `rental`
-  MODIFY `id_rental` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_rental` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `reservasi`
