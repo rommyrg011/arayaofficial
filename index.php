@@ -5,23 +5,33 @@
    <?php include 'ui/navbar.php'; ?>
 
 <header class="mobile-top-header">
-<div class="mobile-brand">ARAYA GAMESTATION</div>
-<div class="mobile-header-actions">
-<button type="button" class="mobile-header-btn mobile-search-btn" id="mobileSearchButton" aria-label="Cari"><i class="fas fa-search"></i></button>
-<button type="button" class="mobile-header-btn mobile-menu-btn" id="mobileMenuButton" aria-label="Buka menu"><i class="fas fa-bars"></i></button>
-
-</div>
+    <div class="mobile-brand">ARAYA GAMESTATION</div>
+        <div class="mobile-header-actions">
+            <button type="button" class="mobile-header-btn mobile-search-btn" id="mobileSearchButton" aria-label="Cari">
+                <i class="fas fa-search"></i>
+            </button>
+            <button type="button" class="mobile-header-btn mobile-menu-btn" id="mobileMenuButton" aria-label="Buka menu">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
 </header>
+
 <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
-<aside class="mobile-menu-panel" id="mobileMenuPanel">
-<div class="mobile-menu-header"><div><span class="mobile-menu-kicker">ARAYA GAMESTATION</span><h3>Menu</h3></div><button type="button" class="mobile-menu-close" id="mobileMenuClose" aria-label="Tutup menu"><i class="fas fa-times"></i></button></div>
-<nav class="mobile-menu-links">
-<a href="#fasilitas"><i class="fas fa-concierge-bell"></i><span>Fasilitas Tersedia</span><i class="fas fa-chevron-right"></i></a>
-<a href="#pricelist"><i class="fas fa-book"></i><span>Daftar Harga</span><i class="fas fa-chevron-right"></i></a>
-<a href="#ketersediaan"><i class="fas fa-check-circle"></i><span>Cek Ketersediaan</span><i class="fas fa-chevron-right"></i></a>
-<a href="#games"><i class="fas fa-gamepad"></i><span>Game Terbaik</span><i class="fas fa-chevron-right"></i></a>
-<a href="#lokasi"><i class="fas fa-map-marker-alt"></i><span>Lokasi Playstation</span><i class="fas fa-chevron-right"></i></a>
-<a href="#ulasan"><i class="fas fa-comments"></i><span>Ulasan Pelanggan</span><i class="fas fa-chevron-right"></i></a>
+    <aside class="mobile-menu-panel" id="mobileMenuPanel">
+        <div class="mobile-menu-header"><div><span class="mobile-menu-kicker">ARAYA GAMESTATION</span><h3>Menu</h3></div><button type="button" class="mobile-menu-close" id="mobileMenuClose" aria-label="Tutup menu"><i class="fas fa-times"></i></button></div>
+            <nav class="mobile-menu-links">
+                <a href="#fasilitas"><i class="fas fa-concierge-bell"></i>
+                <span>Fasilitas Tersedia</span><i class="fas fa-chevron-right"></i></a>
+                <a href="#pricelist"><i class="fas fa-book"></i>
+                <span>Daftar Harga</span><i class="fas fa-chevron-right"></i></a>
+                <a href="#ketersediaan"><i class="fas fa-check-circle"></i>
+                <span>Cek Ketersediaan</span><i class="fas fa-chevron-right"></i></a>
+                <a href="#games"><i class="fas fa-gamepad"></i>
+                <span>Game Terbaik</span><i class="fas fa-chevron-right"></i></a>
+                <a href="#lokasi"><i class="fas fa-map-marker-alt"></i>
+                <span>Lokasi Playstation</span><i class="fas fa-chevron-right"></i></a>
+                <a href="#ulasan"><i class="fas fa-comments"></i>
+                <span>Ulasan Pelanggan</span><i class="fas fa-chevron-right"></i></a>
 </nav>
 </aside>
 <div class="mobile-search-overlay" id="mobileSearchOverlay">
