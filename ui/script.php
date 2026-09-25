@@ -166,6 +166,28 @@
             options.style.display = 'flex';
         }
     }
+
+    document.addEventListener('DOMContentLoaded', function() {
+            const toggleButtons = document.querySelectorAll('.btn-selengkapnya');
+            
+            toggleButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const card = this.closest('.card');
+                    const expandableContent = card.querySelector('.expandable-pricelist');
+                    const textSpan = this.querySelector('span');
+                    
+                    this.classList.toggle('active');
+                    
+                    if (expandableContent.classList.contains('expanded')) {
+                        expandableContent.classList.remove('expanded');
+                        textSpan.textContent = 'Selengkapnya';
+                    } else {
+                        expandableContent.classList.add('expanded');
+                        textSpan.textContent = 'Lebih Sedikit';
+                    }
+                });
+            });
+        });
     </script>
 </body>
 </html>

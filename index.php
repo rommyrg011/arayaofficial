@@ -169,6 +169,41 @@
 
     <div class="separator"></div>
     <section id="pricelist" class="bg-solid py-4">
+        <style>
+            .expandable-pricelist {
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+            .expandable-pricelist.expanded {
+                max-height: 2000px;
+            }
+            .btn-selengkapnya {
+                background-color: transparent;
+                border: 1px solid var(--accent-main);
+                color: var(--accent-main);
+                border-radius: 20px;
+                padding: 6px 18px;
+                font-size: 13px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+            }
+            .btn-selengkapnya:hover {
+                background-color: var(--accent-main);
+                color: #ffffff;
+            }
+            .btn-selengkapnya i {
+                transition: transform 0.4s ease;
+            }
+            .btn-selengkapnya.active i {
+                transform: rotate(180deg);
+            }
+        </style>
+
         <div class="container" data-aos="fade-up" data-aos-duration="800">
             <h2 class="section-title text-center mb-4">Daftar <span>Harga</span></h2>
             
@@ -189,18 +224,28 @@
                 <?php if (!empty($harga_by_cabang)): ?>
                     <?php foreach ($harga_by_cabang as $nama_cabang => $items_harga): ?>
                         <div class="col-lg-5 col-md-6 col-12 mb-3" data-aos="zoom-in" data-aos-delay="100">
-                            <div class="card h-100 p-3 rounded-lg shadow-sm" style="border: 1px solid var(--border-color);">
+                            <div class="card h-100 p-4 border-0 shadow-sm bg-white">
                                 <div class="text-center mb-3">
-                                    <h5 class="font-weight-bold text-accent mb-0" style="font-size: 1.1rem;"><?php echo htmlspecialchars($nama_cabang); ?></h5>
+                                    <h5 class="font-weight-bold text-accent mb-0" style="font-size: 1.25rem; color: #28a745;"><?php echo htmlspecialchars($nama_cabang); ?></h5>
                                 </div>
                                 <ul class="list-group list-group-flush bg-transparent">
-                                    <?php foreach ($items_harga as $item): ?>
-                                        <li class="list-group-item d-flex justify-content-between align-items-center bg-transparent py-2 px-1" style="border-bottom: 1px dashed var(--border-color);">
+                                    <?php 
+                                    $total_items = count($items_harga);
+                                    $visible_items = 3;
+                                    $index = 0;
+                                    foreach ($items_harga as $item): 
+                                        $index++;
+                                        if($index == $visible_items + 1): 
+                                    ?>
+                                        <div class="expandable-pricelist">
+                                    <?php endif; ?>
+
+                                        <li class="list-group-item d-flex justify-content-between align-items-center bg-transparent py-3 px-0" style="border: none; border-bottom: 1px dashed #28a745;">
                                             <div class="pr-2">
-                                                <div class="font-weight-bold mb-0" style="color: var(--text-heading); font-size: 0.88rem; line-height: 1.2;"><?php echo htmlspecialchars($item['p_paket']); ?></div>
-                                                <small class="text-secondary" style="font-size: 0.78rem;"><?php echo htmlspecialchars($item['durasi']); ?></small>
+                                                <div class="font-weight-bold mb-1" style="color: #333; font-size: 0.95rem; line-height: 1.2;"><?php echo htmlspecialchars($item['p_paket']); ?></div>
+                                                <small class="text-secondary" style="font-size: 0.8rem;"><?php echo htmlspecialchars($item['durasi']); ?></small>
                                             </div>
-                                            <span class="font-weight-bold text-accent text-nowrap" style="font-size: 0.88rem;">
+                                            <span class="font-weight-bold text-nowrap" style="font-size: 0.95rem; color: #28a745;">
                                                 <?php 
                                                 if (is_numeric($item['daf_harga'])) {
                                                     echo 'Rp ' . number_format((float)$item['daf_harga'], 0, ',', '.');
@@ -210,8 +255,22 @@
                                                 ?>
                                             </span>
                                         </li>
+
+                                    <?php 
+                                        if($index == $total_items && $total_items > $visible_items): 
+                                    ?>
+                                        </div>
+                                    <?php endif; ?>
                                     <?php endforeach; ?>
                                 </ul>
+                                
+                                <?php if($total_items > $visible_items): ?>
+                                    <div class="text-center mt-4 mb-2">
+                                        <button class="btn-selengkapnya" type="button">
+                                            <span>Selengkapnya</span> <i class="fas fa-chevron-down"></i>
+                                        </button>
+                                    </div>
+                                <?php endif; ?>
                             </div>
                         </div>
                     <?php endforeach; ?>
