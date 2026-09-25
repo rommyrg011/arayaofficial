@@ -523,8 +523,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
 <div class="wa-floating-container">
     <div class="wa-options" id="wa-options">
-        <a href="https://api.whatsapp.com/send?phone=6285147520182&text=Halo%20Admin%20Araya%20Gamestation,%20saya%20ingin%20bertanya..." target="_blank" class="wa-option-btn">Cabang Gambut</a>
-        <a href="https://api.whatsapp.com/send?phone=6283167079509&text=Halo%20Admin%20Araya%20Gamestation,%20saya%20ingin%20bertanya..." target="_blank" class="wa-option-btn">Cabang Beruntung</a>
+        <a href="https://api.whatsapp.com/send?phone=6285147520182&text=Halo%20Admin%20Araya%20Gamestation%20cabang%20Gambut,%20saya%20ingin%20bertanya" target="_blank" class="wa-option-btn">Cabang Gambut</a>
+        <a href="https://api.whatsapp.com/send?phone=6283167079509&text=Halo%20Admin%20Araya%20Gamestation%20cabang%20Beruntung,%20saya%20ingin%20bertanya" target="_blank" class="wa-option-btn">Cabang Beruntung</a>
     </div>
     <button class="wa-main-btn" onclick="toggleWa()">
         <svg viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
