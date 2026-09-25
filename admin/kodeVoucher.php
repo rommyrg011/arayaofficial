@@ -47,7 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['simpanVoucher'])) {
         }
         $_SESSION['notif'] = "Data Voucher berhasil diperbarui!";
     }
-    header("Location: kodeVoucher.php");
+    header("Location: kodeVoucher");
     exit;
 }
 
@@ -64,7 +64,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['simpanTambahKuota'])) 
         }
         $_SESSION['notif'] = "Kuota voucher berhasil ditambahkan!";
     }
-    header("Location: kodeVoucher.php");
+    header("Location: kodeVoucher");
     exit;
 }
 
@@ -79,7 +79,7 @@ if (isset($_GET['hapus_idVoucher'])) {
     }
     
     $_SESSION['notif'] = "Data Voucher berhasil dihapus!";
-    header("Location: kodeVoucher.php");
+    header("Location: kodeVoucher");
     exit;
 }
 
@@ -146,7 +146,7 @@ include 'template/topbar.php';
 
 <div class="modal fade" id="modalVoucher" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
-        <form id="formVoucher" action="kodeVoucher.php" method="POST">
+        <form id="formVoucher" action="kodeVoucher" method="POST">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="modalLabel"></h5>
@@ -240,7 +240,7 @@ include 'template/topbar.php';
 
 <div class="modal fade" id="modalTambahKuota" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-sm" role="document">
-        <form id="formTambahKuota" action="kodeVoucher.php" method="POST">
+        <form id="formTambahKuota" action="kodeVoucher" method="POST">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Tambah Kuota Voucher</h5>
@@ -416,7 +416,7 @@ $(document).ready(function() {
     $('#btnHapus').click(function() {
         if(selectedId) {
             if(confirm('Apakah Anda yakin ingin menghapus data promo "' + selectedNama + '"?')) {
-                window.location.href = 'kodeVoucher.php?hapus_idVoucher=' + selectedId;
+                window.location.href = 'kodeVoucher?hapus_idVoucher=' + selectedId;
             }
         }
     });

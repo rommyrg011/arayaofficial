@@ -62,8 +62,8 @@ include 'template/topbar.php';
         <div class="card-header py-3 text-center">
             <h6 class="m-0 font-weight-bold text-primary" style="font-size:25px;">Manajemen Voucher Pelanggan</h6>
             <div class="mt-3">
-                <button class="btn btn-warning btn-sm mr-2" id="btnReset"><i class="fas fa-check"></i> Selesai Promo </button>
-                <button class="btn btn-danger btn-sm" id="btnHapus" disabled><i class="fas fa-trash"></i> Hapus Terpilih</button>
+                <button class="btn btn-warning btn-sm mr-2" id="btnReset"><i class="fas fa-sync"></i> Reset Data</button>
+                <button class="btn btn-danger btn-sm" id="btnHapus" disabled><i class="fas fa-trash"></i> Hapus Data Terpilih</button>
             </div>
         </div>
         <div class="card-body">
@@ -100,7 +100,7 @@ $(document).ready(function() {
         "processing": true,
         "serverSide": true,
         "ajax": {
-            "url": "ajax/kpelangganVoucher.php",
+            "url": "ajax/kriwayatPelanggan.php",
             "type": "POST"
         },
         "columns": [

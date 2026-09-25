@@ -50,6 +50,7 @@
             <div class="bg-white py-2 collapse-inner rounded">
                 <a class="collapse-item" href="<?= asset('admin/kodeVoucher'); ?>">Kode Voucher</a>
                 <a class="collapse-item" href="<?= asset('admin/pelangganVoucher'); ?>">Pelanggan Voucher</a>
+                <a class="collapse-item" href="<?= asset('admin/riwayatPelanggan'); ?>">Riwayat Pelanggan</a>
             </div>
         </div>
     </li>
