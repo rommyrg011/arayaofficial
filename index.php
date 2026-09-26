@@ -10,9 +10,6 @@
             <button type="button" class="mobile-header-btn mobile-search-btn" id="mobileSearchButton" aria-label="Cari">
                 <i class="fas fa-search"></i>
             </button>
-            <button type="button" class="mobile-header-btn mobile-menu-btn" id="mobileMenuButton" aria-label="Buka menu">
-                <i class="fas fa-bars"></i>
-            </button>
         </div>
 </header>
 
@@ -34,15 +31,34 @@
                 <span>Ulasan Pelanggan</span><i class="fas fa-chevron-right"></i></a>
 </nav>
 </aside>
+
 <div class="mobile-search-overlay" id="mobileSearchOverlay">
-<div class="mobile-search-box"><div class="mobile-search-header"><h3>Cari</h3><button type="button" id="mobileSearchClose" aria-label="Tutup pencarian"><i class="fas fa-times"></i></button></div>
-<div class="mobile-search-input-wrap"><i class="fas fa-search"></i><input type="search" id="mobileSearchInput" placeholder="Cari fasilitas, game, lokasi..." autocomplete="off"></div>
-<div class="mobile-search-results" id="mobileSearchResults">
-<a href="#fasilitas" data-search="fasilitas harga vip premiere wifi parkir cctv"><i class="fas fa-concierge-bell"></i><span>Fasilitas</span></a>
-<a href="#ketersediaan" data-search="ketersediaan unit gambut beruntung"><i class="fas fa-check-circle"></i><span>Cek Ketersediaan</span></a>
-<a href="#games" data-search="game ps4 pes tekken naruto resident"><i class="fas fa-gamepad"></i><span>Game</span></a>
-<a href="#lokasi" data-search="lokasi gambut beruntung alamat map"><i class="fas fa-map-marker-alt"></i><span>Lokasi</span></a>
-</div></div></div>
+    <div class="mobile-search-box">
+        <div class="mobile-search-header">
+            <h3>Pencarian</h3>
+            <button type="button" id="mobileSearchClose" aria-label="Tutup pencarian"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="mobile-search-input-wrap">
+            <i class="fas fa-search"></i>
+            <input type="search" id="mobileSearchInput" placeholder="Cari fasilitas, harga, game, lokasi, sewa ps, reservasi..." autocomplete="off">
+        </div>
+        <div class="mobile-search-results" id="mobileSearchResults">
+            <!-- Navigasi & Bagian Utama -->
+            <a href="#tentang" data-search="tentang kami profil araya gamestation sejarah hiburan digital"><i class="fas fa-info-circle"></i><span>Tentang Kami</span></a>
+            <a href="#fasilitas" data-search="fasilitas vip premiere wifi parkir cctv tv 43 inch kipas ac lemari penyimpanan"><i class="fas fa-concierge-bell"></i><span>Fasilitas Tersedia</span></a>
+            <a href="#pricelist" data-search="daftar harga paket sewa room reguler vip premiere jam hari"><i class="fas fa-book"></i><span>Daftar Harga / Pricelist</span></a>
+            <a href="#sewa-rumah" data-search="sewa rumah home service antar jemput ps playstation mager"><i class="fas fa-home"></i><span>Sewa Playstation</span></a>
+            <a href="#games" data-search="game terbaik ps4 pes efootball tekken 7 naruto storm 4 it takes two a way out resident evil 4 remake"><i class="fas fa-gamepad"></i><span>Koleksi Game Terbaik</span></a>
+            <a href="#ketersediaan" data-search="cek ketersediaan unit kosong status ps cabang gambut beruntung"><i class="fas fa-check-circle"></i><span>Cek Ketersediaan Unit</span></a>
+            <a href="#reservasi" data-search="reservasi online booking pesan tempat tanpa antri"><i class="fas fa-calendar-alt"></i><span>Reservasi</span></a>
+            <a href="#lokasi" data-search="lokasi alamat map cabang 1 gambut banjar cabang 2 beruntung banjarmasin selatan"><i class="fas fa-map-marker-alt"></i><span>Lokasi Cabang</span></a>
+
+            <!-- Halaman / Fitur Spesifik -->
+            <a href="sewaps-araya" data-search="halaman sewa ps ps4 antar ke rumah pemesanan"><i class="fas fa-paper-plane"></i><span>Sewa Playstation</span></a>
+            <a href="reservasi-araya" data-search="halaman reservasi booking online unit playstation"><i class="fas fa-paper-plane"></i><span>Reservasi</span></a>
+        </div>
+    </div>
+</div>
 
     
     <div id="beranda-carousel-wrapper">
@@ -450,14 +466,16 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    var menuBtn = document.getElementById('mobileMenuButton');
     var menuClose = document.getElementById('mobileMenuClose');
     var menuOverlay = document.getElementById('mobileMenuOverlay');
     var searchBtn = document.getElementById('mobileSearchButton');
     var searchClose = document.getElementById('mobileSearchClose');
     var searchOverlay = document.getElementById('mobileSearchOverlay');
+    var searchInput = document.getElementById('mobileSearchInput');
+    var searchResultsContainer = document.getElementById('mobileSearchResults');
+    var searchItems = searchResultsContainer ? searchResultsContainer.querySelectorAll('a') : [];
     var menuLinks = document.querySelectorAll('.mobile-menu-links a');
-    var detailBtns = document.querySelectorAll('.mobile-detail-btn, .btn-detail, [data-target="sidebar"], [href="#mobileMenuPanel"], .mobile-header-btn.mobile-menu-btn, .mobile-bottom-nav a[href="#menu"], .mobile-bottom-nav a[href="#sidebar"], .mobile-bottom-nav a[href="#mobileMenuPanel"]');
+    var detailBtns = document.querySelectorAll('.mobile-detail-btn, .btn-detail, [data-target="sidebar"], [href="#mobileMenuPanel"], .mobile-bottom-nav a[href="#menu"], .mobile-bottom-nav a[href="#sidebar"], .mobile-bottom-nav a[href="#mobileMenuPanel"]');
 
     function openSidebar() {
         document.body.classList.add('mobile-menu-open');
@@ -465,10 +483,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function closeSidebar() {
         document.body.classList.remove('mobile-menu-open');
-    }
-
-    if (menuBtn) {
-        menuBtn.addEventListener('click', openSidebar);
     }
 
     detailBtns.forEach(function (btn) {
@@ -493,12 +507,17 @@ document.addEventListener('DOMContentLoaded', function () {
     if (searchBtn) {
         searchBtn.addEventListener('click', function () {
             document.body.classList.add('mobile-search-open');
+            if (searchInput) {
+                setTimeout(function() { searchInput.focus(); }, 100);
+            }
         });
     }
 
     if (searchClose) {
         searchClose.addEventListener('click', function () {
             document.body.classList.remove('mobile-search-open');
+            if (searchInput) searchInput.value = '';
+            filterSearch('');
         });
     }
 
@@ -509,9 +528,35 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     }
+
+    // Fungsi filter pencarian live berdasarkan keyword di atribut data-search atau teks judul
+    function filterSearch(query) {
+        var q = query.toLowerCase().trim();
+        searchItems.forEach(function (item) {
+            var searchData = (item.getAttribute('data-search') || '') + ' ' + (item.textContent || '').toLowerCase();
+            if (q === '' || searchData.indexOf(q) !== -1) {
+                item.style.display = '';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    }
+
+    if (searchInput) {
+        searchInput.addEventListener('input', function () {
+            filterSearch(this.value);
+        });
+    }
+
+    // Tutup overlay pencarian saat hasil pencarian diklik
+    searchItems.forEach(function (item) {
+        item.addEventListener('click', function () {
+            document.body.classList.remove('mobile-search-open');
+            if (searchInput) searchInput.value = '';
+            filterSearch('');
+        });
+    });
 });
-
-
 </script>
 </body>
 
