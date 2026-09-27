@@ -1,88 +1,71 @@
 <?php 
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
 require_once __DIR__ . '/../function.php'; 
-
-if (isset($_GET['hapus_idVoucher'])) {
-    $id_hapus = intval($_GET['hapus_idVoucher']);
-    if ($koneksi instanceof PDO) {
-        $stmt = $koneksi->prepare("DELETE FROM customer_vouchers WHERE id = ?");
-        $stmt->execute([$id_hapus]);
-    } else {
-        mysqli_query($koneksi, "DELETE FROM customer_vouchers WHERE id = $id_hapus");
-    }
-    
-    $_SESSION['notif'] = "Data klaim voucher pelanggan berhasil dihapus!";
-    header("Location: pelangganVoucher.php");
-    exit;
-}
-
-if (isset($_GET['reset_data'])) {
-    if ($koneksi instanceof PDO) {
-        $koneksi->query("DELETE FROM customer_vouchers");
-    } else {
-        mysqli_query($koneksi, "DELETE FROM customer_vouchers");
-    }
-    
-    $_SESSION['notif'] = "Semua data klaim voucher pelanggan berhasil direset!";
-    header("Location: pelangganVoucher.php");
-    exit;
-}
-
 include 'template/head.php'; 
 include 'template/sidebar.php'; 
 include 'template/topbar.php'; 
 ?>
-
-<style>
-    #dataTableVoucher tbody tr.selected {
-        background-color: rgba(231, 74, 59, 0.15) !important; 
-        color: #333 !important;
-    }
-    #dataTableVoucher tbody tr.selected code {
-        background-color: rgba(255, 255, 255, 0.8) !important;
-    }
-</style>
-
 <div class="container-fluid">
+    <div id="waNotifContainer"></div>
 
-    <div id="notifAjaxPlaceholder"></div>
-
-    <?php if(isset($_SESSION['notif'])): ?>
-        <div class="alert alert-success alert-dismissible fade show alert-fixed">
-            <?= $_SESSION['notif']; ?>
-            <button type="button" class="close" data-dismiss="alert">&times;</button>
-        </div>
-        <?php unset($_SESSION['notif']); ?>
-    <?php endif; ?>
-    
     <div class="card shadow mb-4">
         <div class="card-header py-3 text-center">
-            <h6 class="m-0 font-weight-bold text-primary" style="font-size:25px;">Manajemen Voucher Pelanggan</h6>
-            <div class="mt-3">
-                <button class="btn btn-warning btn-sm mr-2" id="btnReset"><i class="fas fa-sync"></i> Reset Data</button>
-                <button class="btn btn-danger btn-sm" id="btnHapus" disabled><i class="fas fa-trash"></i> Hapus Data Terpilih</button>
-            </div>
+            <h6 class="m-0 font-weight-bold" style="font-size:25px;">Riwayat Pelanggan</h6>
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-bordered table-striped table-hover" id="dataTableVoucher" width="100%" cellspacing="0">
+                <table class="table table-bordered table-hover w-100" id="dataTable">
                     <thead class="bg-light">
                         <tr>
-                            <th width="5%" class="text-center">No</th>
-                            <th>Nama Pelanggan</th>
-                            <th>No. WhatsApp</th>
-                            <th>Kode Voucher</th>
-                            <th class="text-center">Status Pakai</th>
-                            <th>Tanggal Klaim</th>
-                            <th>Tanggal Pakai</th>
+                            <th width="5%">No</th>
+                            <th>Whatsapp</th>
+                            <th>Total Pakai Voucher</th>
+                            <th width="15%">Aksi</th>
                         </tr>
                     </thead>
+                    <tbody></tbody>
                 </table>
             </div>
         </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalKirimVoucher" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <form id="formKirimVoucher">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Kirim Voucher WhatsApp</h5>
+                    <button class="close" type="button" data-dismiss="modal"><span>&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="kv_nama" name="nama">
+                    <div class="form-group">
+                        <label>No. WA Pelanggan</label>
+                        <input type="text" class="form-control" id="kv_whatsapp" name="whatsapp" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>Pilihan Promo</label>
+                        <select class="form-control" id="kv_promo" name="promo" required>
+                            <option value="Voucher Reguler">Voucher Reguler</option>
+                            <option value="Voucher vip">Voucher VIP</option>
+                            <option value="Voucher Premiere">Voucher Premiere</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Kode Voucher</label>
+                        <input type="text" class="form-control font-weight-bold text-success" id="kv_kode" name="kode" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>Keterangan / Pesan WhatsApp</label>
+                        <textarea class="form-control" id="kv_pesan" name="pesan" rows="6" required></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Batal</button>
+                    <button type="submit" id="btnProsesKirimVoucher" class="btn btn-success"><i class="fab fa-whatsapp"></i> Buat & Kirim</button>
+                </div>
+            </div>
+        </form>
     </div>
 </div>
 
@@ -90,13 +73,14 @@ include 'template/topbar.php';
 include 'template/footer.php'; 
 include 'template/script.php'; 
 ?>
-
 <script>
 $(document).ready(function() {
-    var selectedId = null;
-    var selectedNama = "";
+    // Inisialisasi DataTables
+    if ($.fn.DataTable.isDataTable('#dataTable')) {
+        $('#dataTable').DataTable().destroy();
+    }
 
-    var table = $('#dataTableVoucher').DataTable({
+    var table = $('#dataTable').DataTable({
         "processing": true,
         "serverSide": true,
         "ajax": {
@@ -105,54 +89,101 @@ $(document).ready(function() {
         },
         "columns": [
             { "data": "no", "className": "text-center" },
-            { "data": "nama_pelanggan" },
-            { "data": "nomor_whatsapp" },
-            { "data": "kode_voucher", "className": "text-center font-weight-bold" },
-            { "data": "status_pakai", "className": "text-center" },
-            { "data": "tanggal_klaim" },
-            { "data": "tanggal_pakai" }
-        ],
-        "createdRow": function(row, data) {
-            $(row).attr('data-id', data.id);
-        }
+            { "data": "whatsapp", "className": "text-center" },
+            { "data": "total_pakai", "className": "text-center font-weight-bold text-primary" },
+            { "data": "aksi", "className": "text-center", "orderable": false }
+        ]
     });
 
-    $('#dataTableVoucher tbody').on('click', 'tr', function() {
-        var tr = $(this).closest('tr');
-        var data = table.row(tr).data();
-        if (!data) return;
+    // Fungsi Generate Kode Voucher
+    function generateVoucherKode(jenisPromo) {
+        var prefix = "REG-";
+        if (jenisPromo === 'Voucher vip') prefix = "VIP-";
+        if (jenisPromo === 'Voucher Premiere') prefix = "PMR-";
+        
+        var randomString = Math.random().toString(36).substring(2, 7).toUpperCase();
+        return prefix + randomString;
+    }
 
-        if (tr.hasClass('selected')) {
-            tr.removeClass('selected');
-            selectedId = null; 
-            $('#btnHapus').prop('disabled', true);
-        } else {
-            table.$('tr.selected').removeClass('selected');
-            tr.addClass('selected');
-            selectedId = data.id;
-            selectedNama = data.nama_pelanggan;
-            $('#btnHapus').prop('disabled', false);
-        }
+    // Fungsi Mendapatkan Waktu Sapaan (Pagi/Siang/Sore/Malam)
+    function getWaktu() {
+        var jam = new Date().getHours();
+        if (jam >= 4 && jam < 11) return "pagi";
+        if (jam >= 11 && jam < 15) return "siang";
+        if (jam >= 15 && jam < 18) return "sore";
+        return "malam";
+    }
+
+    // Fungsi Update Template Pesan (Dengan Sapaan Dinamis & Backtick untuk Tap-to-copy)
+    function updateTemplatePesan(promo, kode) {
+        var waktu = getWaktu();
+        var pesan = "Selamat " + waktu + ",\n\nNomor Anda berhak mendapatkan " + promo + ".\nUntuk kode vouchernya adalah sebagai berikut:\n\n`" + kode + "`\n\nSilakan tunjukkan pesan ini untuk menggunakan voucher Anda di Araya Gamestation. Terima kasih";
+        $('#kv_pesan').val(pesan);
+    }
+
+    // Aksi Klik Tombol Kirim Voucher
+    $('#dataTable tbody').on('click', '.btn-kirim-voucher', function() {
+        var data = table.row($(this).closest('tr')).data();$('#kv_whatsapp').val(data.whatsapp);
+        $('#kv_nama').val(data.nama ? data.nama : 'Pelanggan');
+        $('#kv_promo').val('Voucher Reguler'); 
+        
+        var kodeBaru = generateVoucherKode('Voucher Reguler');
+        $('#kv_kode').val(kodeBaru);
+        updateTemplatePesan('Voucher Reguler', kodeBaru);
+
+        $('#modalKirimVoucher').modal('show');
     });
 
-    $('#btnHapus').click(function() {
-        if(selectedId) {
-            if(confirm('Apakah Anda yakin ingin menghapus data voucher milik "' + selectedNama + '"?')) {
-                window.location.href = 'pelangganVoucher.php?hapus_idVoucher=' + selectedId;
+    // Aksi Ganti Pilihan Promo
+    $('#kv_promo').change(function() {
+        var jenisPromo = $(this).val();
+        var kodeBaru = generateVoucherKode(jenisPromo);
+        $('#kv_kode').val(kodeBaru);
+        updateTemplatePesan(jenisPromo, kodeBaru);
+    });
+
+    // Aksi Submit Form
+    $('#formKirimVoucher').submit(function(e) {
+        e.preventDefault();
+        $('#btnProsesKirimVoucher').prop('disabled', true).text('Memproses...');
+
+        $.ajax({
+            url: 'ajax/proses_kirim_voucher.php',
+            type: 'POST',
+            data: $(this).serialize(),
+            dataType: 'json',
+            success: function(response) {
+                $('#modalKirimVoucher').modal('hide');
+                $('#btnProsesKirimVoucher').prop('disabled', false).html('<i class="fab fa-whatsapp"></i> Buat & Kirim');
+                
+                if (response.status === true) {
+                    var alertSukses = '<div class="alert alert-success alert-dismissible fade show">' +
+                                      '<strong>Sukses!</strong> ' + response.message +
+                                      '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+                                      '</div>';
+                    $('#waNotifContainer').html(alertSukses);
+                } else {
+                    var alertError = '<div class="alert alert-danger alert-dismissible fade show">' +
+                                     '<strong>Gagal!</strong> ' + response.message +
+                                     '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+                                     '</div>';
+                    $('#waNotifContainer').html(alertError);
+                }
+                
+                setTimeout(function() {
+                    $(".alert").fadeTo(500, 0).slideUp(500, function(){
+                        $(this).remove(); 
+                    });
+                }, 5000);
+            },
+            error: function(xhr) {
+                $('#btnProsesKirimVoucher').prop('disabled', false).html('<i class="fab fa-whatsapp"></i> Buat & Kirim');
+                console.error(xhr.responseText);
+                alert("Gagal memproses data. Cek Console (F12) untuk detail respon server.");
             }
-        }
-    });
-
-    $('#btnReset').click(function() {
-        if(confirm('PERINGATAN: Anda akan mereset dan menghapus semua data pelanggan. Apakah anda yakin ingin melanjutkan?')) {
-            window.location.href = 'pelangganVoucher.php?reset_data=true';
-        }
+        });
     });
 });
-
-window.setTimeout(function() {
-    $(".alert").fadeTo(500, 0).slideUp(500, function(){
-        $(this).remove(); 
-    });
-}, 2000);
 </script>
+</body>
+</html>

@@ -100,7 +100,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         $pesan_wa .= "Terima kasih telah melakukan klaim voucher promo di *Araya Gamestation*.\n\n";
                         $pesan_wa .= "Berikut adalah detail kode voucher Anda:\n";
                         $pesan_wa .= "- Promo : $nama_promo_clean\n";
-                        $pesan_wa .= "- Kode Voucher : *$kode_voucher*\n\n";
+                        $pesan_wa .= "- Kode Voucher : `*$kode_voucher*`\n\n";
                         $pesan_wa .= "Silahkan masukkan kode voucher ini ke form reservasi Araya Gamestation.\n\n";
                         $pesan_wa .= "https://arayaofficial.site/reservasi-araya \n\n";
                         $pesan_wa .= "_Pesan ini dikirim otomatis oleh sistem billing Araya Gamestation._";
