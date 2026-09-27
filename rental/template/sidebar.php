@@ -23,7 +23,7 @@
 <li class="nav-item">
     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#masterData"
         aria-expanded="true" aria-controls="masterData">
-        <i class="fas fa-fw fa-cog"></i>
+        <i class="fas fa-folder"></i>
         <span>Data</span>
     </a>
     <div id="masterData" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
