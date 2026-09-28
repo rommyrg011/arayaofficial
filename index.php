@@ -350,11 +350,31 @@
                     <div class="ps-game-label">A WAY OUT</div>
                 </div>
                 <div class="ps-game-card" data-aos="fade-up" data-aos-delay="600">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrbXyYC4b8eSHSd2T_t75wwfqTbCnX_i8MTThXo7mYVg&s=10" alt="RESIDENT 4 REMAKE" class="ps-game-box-art">
-                    <div class="ps-game-label">RESIDENT 4 REMAKE</div>
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrbXyYC4b8eSHSd2T_t75wwfqTbCnX_i8MTThXo7mYVg&s=10" alt="RESIDENT EVIL 4 REMAKE" class="ps-game-box-art">
+                    <div class="ps-game-label">RESIDENT Evil 4 REMAKE</div>
+                </div>
+                <div class="ps-game-card" data-aos="fade-up" data-aos-delay="600">
+                    <img src="https://image.api.playstation.com/vulcan/ap/rnd/202206/0204/uDFoGvnMTTCLVmTwjj0njGWC.png" alt="RESIDENT EVIL 2" class="ps-game-box-art">
+                    <div class="ps-game-label">RESIDENT EVIL 2</div>
+                </div>
+                <div class="ps-game-card" data-aos="fade-up" data-aos-delay="600">
+                    <img src="https://www.static-src.com/wcsstore/Indraprastha/images/catalog/full//95/MTA-10533829/playstation_playstation_full02.jpg" alt="CRASH BANDICOOT" class="ps-game-box-art">
+                    <div class="ps-game-label">CRASH BANDICOOT</div>
+                </div>
+                <div class="ps-game-card" data-aos="fade-up" data-aos-delay="600">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmOboOZ9gWUQ7ngMGwmUGa9VWs108kY9TXj019WwhJtSBFT_hOwm4jhVM5&s=10" alt="MINECRAFT POCKET EDITION" class="ps-game-box-art">
+                    <div class="ps-game-label">MINECRAFT POCKET EDITION</div>
+                </div>
+                <div class="ps-game-card" data-aos="fade-up" data-aos-delay="600">
+                    <img src="https://images.tokopedia.net/img/cache/700/VqbcmM/2023/5/2/4e68f78c-68d1-408f-a40d-d97a66327fb9.jpg.webp" alt="OVERCOOKED 2" class="ps-game-box-art">
+                    <div class="ps-game-label">OVERCOOKED 2</div>
+                </div>
+                <div class="ps-game-card" data-aos="fade-up" data-aos-delay="600">
+                    <img src="https://upload.wikimedia.org/wikipedia/id/4/4f/The_Last_of_Us_Part_II.png?utm_source=id.wikipedia.org&utm_campaign=index&utm_content=original" alt="THE LAST OF US 2" class="ps-game-box-art">
+                    <div class="ps-game-label">THE LAST OF US 2</div>
                 </div>
             </div>
-            <h6 class="mt-4 text-secondary">Dan masih banyak lagi...</h6>
+            <h6 class="mt-4 text-secondary">Dan masih banyak lagi, bisa request game</h6>
         </div>
     </section>
 
@@ -378,7 +398,7 @@
             <div class="banner-reservasi" data-aos="fade-up">
                 <div class="banner-res-content">
                     <div class="banner-res-badge"><i class="fas fa-calendar-alt mr-2"></i> RESERVASI ONLINE</div>
-                    <h2 class="banner-res-title">Amankan Unit Bermain Anda?<br><span>Reservasi Sekarang Tanpa Antri!</span></h2>
+                    <h2 class="banner-res-title">Amankan Unit Bermain Anda?<br><span>Reservasi Sekarang Tanpa Antri.</span></h2>
                     <p class="banner-res-text">Sistem reservasi online kami memungkinkan Anda untuk memilih cabang, unit, dan waktu bermain dengan mudah dan cepat langsung dari gadget Anda.</p>
                     <a href="reservasi-araya" class="btn btn-res-action">
                         <i class="fas fa-paper-plane mr-2"></i> PESAN SEKARANG

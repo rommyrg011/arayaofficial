@@ -130,6 +130,33 @@ if ($koneksi instanceof PDO) {
     font-weight: 600;
 }
 
+.promo-empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    grid-column: 1 / -1;
+}
+
+.promo-empty-icon {
+    font-size: 3.5rem;
+    color: var(--text-muted, #6c757d);
+    margin-bottom: 15px;
+    opacity: 0.7;
+}
+
+.promo-empty-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-heading, #343a40);
+    margin-bottom: 8px;
+}
+
+.promo-empty-desc {
+    font-size: 0.9rem;
+    color: var(--text-muted, #6c757d);
+    max-width: 400px;
+    margin: 0 auto;
+}
+
 @media (max-width: 576px) {
     .promo-section {
         padding-top: 5px !important;
@@ -164,50 +191,58 @@ if ($koneksi instanceof PDO) {
         </div>
         
         <div class="promo-pricing-wrapper" data-aos="fade-up" data-aos-delay="100">
-            <?php foreach($promos_data as $promo): ?>
-                <?php 
-                    $card_class = ($promo['best_value'] == 'Ya') ? 'promo-card-highlight-glued' : 'promo-card-standard-glued';
-                    $btn_class = ($promo['best_value'] == 'Ya') ? 'btn-promo-highlight' : 'btn-promo-standard';
-                    
-                    $harga_normal = (float)$promo['harga_normal'];
-                    $potongan = (float)$promo['potongan'];
-                    $harga_akhir = $harga_normal - $potongan;
-                    if ($harga_akhir < 0) $harga_akhir = 0;
-
-                    $harga_normal_format = number_format($harga_normal, 0, ',', '.');
-                    $harga_akhir_format = number_format($harga_akhir, 0, ',', '.');
-                    
-                    $keterangan_list = explode("\n", $promo['keterangan']);
-                ?>
-                <div class="<?= $card_class; ?>">
-                    <div>
-                        <?php if($promo['best_value'] == 'Ya'): ?>
-                            <div class="promo-badge">BEST VALUE</div>
-                        <?php endif; ?>
-                        <div class="promo-card-header">
-                            <h3 class="promo-title"><?= htmlspecialchars($promo['nama_promo']); ?></h3>
-                            <p class="promo-desc <?= ($promo['best_value'] == 'Tidak') ? 'text-muted-custom' : ''; ?>">Potongan Spesial</p>
-                        </div>
-                        <div class="promo-price-wrapper">
-                            <div class="promo-price-normal">
-                                Rp <?= $harga_normal_format; ?>
-                            </div>
-                            <div class="promo-price">
-                                <span class="price-currency">Rp</span>
-                                <span class="price-amount"><?= $harga_akhir_format; ?></span>
-                            </div>
-                        </div>
-                        <ul class="promo-features">
-                            <?php foreach($keterangan_list as $ket): ?>
-                                <?php if(trim($ket) !== ''): ?>
-                                    <li><i class="fas fa-check-circle"></i> <?= htmlspecialchars(trim($ket)); ?></li>
-                                <?php endif; ?>
-                            <?php endforeach; ?>
-                        </ul>
-                    </div>
-                    <a href="promo-araya?id=<?= $promo['id']; ?>" class="btn <?= $btn_class; ?> w-100">Klaim Voucher</a>
+            <?php if (empty($promos_data)): ?>
+                <div class="promo-empty-state">
+                    <i class="fas fa-ticket-alt promo-empty-icon"></i>
+                    <h3 class="promo-empty-title">Belum Ada Promo</h3>
+                    <p class="promo-empty-desc">Mohon maaf, saat ini sedang tidak ada promo yang tersedia.</p>
                 </div>
-            <?php endforeach; ?>
+            <?php else: ?>
+                <?php foreach($promos_data as $promo): ?>
+                    <?php 
+                        $card_class = ($promo['best_value'] == 'Ya') ? 'promo-card-highlight-glued' : 'promo-card-standard-glued';
+                        $btn_class = ($promo['best_value'] == 'Ya') ? 'btn-promo-highlight' : 'btn-promo-standard';
+                        
+                        $harga_normal = (float)$promo['harga_normal'];
+                        $potongan = (float)$promo['potongan'];
+                        $harga_akhir = $harga_normal - $potongan;
+                        if ($harga_akhir < 0) $harga_akhir = 0;
+
+                        $harga_normal_format = number_format($harga_normal, 0, ',', '.');
+                        $harga_akhir_format = number_format($harga_akhir, 0, ',', '.');
+                        
+                        $keterangan_list = explode("\n", $promo['keterangan']);
+                    ?>
+                    <div class="<?= $card_class; ?>">
+                        <div>
+                            <?php if($promo['best_value'] == 'Ya'): ?>
+                                <div class="promo-badge">BEST VALUE</div>
+                            <?php endif; ?>
+                            <div class="promo-card-header">
+                                <h3 class="promo-title"><?= htmlspecialchars($promo['nama_promo']); ?></h3>
+                                <p class="promo-desc <?= ($promo['best_value'] == 'Tidak') ? 'text-muted-custom' : ''; ?>">Potongan Spesial</p>
+                            </div>
+                            <div class="promo-price-wrapper">
+                                <div class="promo-price-normal">
+                                    Rp <?= $harga_normal_format; ?>
+                                </div>
+                                <div class="promo-price">
+                                    <span class="price-currency">Rp</span>
+                                    <span class="price-amount"><?= $harga_akhir_format; ?></span>
+                                </div>
+                            </div>
+                            <ul class="promo-features">
+                                <?php foreach($keterangan_list as $ket): ?>
+                                    <?php if(trim($ket) !== ''): ?>
+                                        <li><i class="fas fa-check-circle"></i> <?= htmlspecialchars(trim($ket)); ?></li>
+                                    <?php endif; ?>
+                                <?php endforeach; ?>
+                            </ul>
+                        </div>
+                        <a href="promo-araya?id=<?= $promo['id']; ?>" class="btn <?= $btn_class; ?> w-100">Klaim Voucher</a>
+                    </div>
+                <?php endforeach; ?>
+            <?php endif; ?>
         </div>
     </div>
 </section>
