@@ -117,7 +117,7 @@ $(document).ready(function() {
     // Fungsi Update Template Pesan (Dengan Sapaan Dinamis & Backtick untuk Tap-to-copy)
     function updateTemplatePesan(promo, kode) {
         var waktu = getWaktu();
-        var pesan = "Selamat " + waktu + ",\n\nNomor Anda berhak mendapatkan " + promo + ".\nUntuk kode vouchernya adalah sebagai berikut:\n\n`" + kode + "`\n\nSilahkan masukkan kode voucher diatas ke form reservasi Araya Gamestation, berikut linknya :\n\nhttps://arayaofficial.site/reservasi-araya";
+        var pesan = "Selamat " + waktu + ",\n\nNomor Anda berhak mendapatkan " + promo + ".\nUntuk kode vouchernya adalah sebagai berikut:\n\n`" + kode + "`\n\nSilahkan masukkan kode voucher diatas ke form reservasi Araya Gamestation, berikut linknya :\n\nhttps://arayaofficial.site/reservasi-araya\n";
         $('#kv_pesan').val(pesan);
     }
 
