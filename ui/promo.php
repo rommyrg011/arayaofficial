@@ -33,112 +33,142 @@ if ($koneksi instanceof PDO) {
 }
 
 .promo-pricing-wrapper {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 260px));
-    justify-content: center;
-    gap: 15px;
-    width: 100%;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 15px !important;
+    width: 100% !important;
+    box-shadow: none !important;
+    padding: 0 !important;
 }
 
-.promo-card-highlight-glued,
-.promo-card-standard-glued {
-    position: relative;
-    padding: 16px;
-    border-radius: 12px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    transition: all 0.3s ease;
-    box-sizing: border-box;
+.promo-card-standard-glued,
+.promo-card-highlight-glued {
+    position: relative !important;
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+    border-radius: 16px !important;
+    padding: 18px !important;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    width: 100% !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
+    color: #333333 !important;
+}
+
+.promo-card-header {
+    margin-bottom: 6px !important;
 }
 
 .promo-title {
-    font-size: 1.05rem;
-    font-weight: 700;
-    margin-bottom: 2px;
-    line-height: 1.2;
+    font-size: 1.1rem !important;
+    font-weight: 700 !important;
+    color: #111827 !important;
+    margin-bottom: 2px !important;
+    line-height: 1.2 !important;
 }
 
 .promo-desc {
-    font-size: 0.75rem;
-    margin-bottom: 10px;
+    font-size: 0.8rem !important;
+    color: #6b7280 !important;
+    margin-bottom: 10px !important;
 }
 
 .promo-badge {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    font-size: 0.65rem;
-    padding: 3px 8px;
-    border-radius: 20px;
+    position: absolute !important;
+    top: 16px !important;
+    right: 16px !important;
+    background-color: #dcfce7 !important;
+    color: #166534 !important;
+    border: 1px solid #86efac !important;
+    font-size: 0.65rem !important;
+    font-weight: 700 !important;
+    padding: 3px 8px !important;
+    border-radius: 20px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
 }
 
 .promo-price-wrapper {
-    margin: 10px 0;
+    margin: 10px 0 14px 0 !important;
 }
 
 .promo-price-normal {
-    text-decoration: line-through;
-    opacity: 0.7;
-    font-size: 0.8rem;
-    margin-bottom: -2px;
+    text-decoration: line-through !important;
+    color: #9ca3af !important;
+    font-size: 0.85rem !important;
+    margin-bottom: 2px !important;
 }
 
 .promo-price {
-    display: flex;
-    align-items: baseline;
-    gap: 2px;
+    display: flex !important;
+    align-items: baseline !important;
+    gap: 4px !important;
+    color: #166534 !important;
 }
 
 .price-currency {
-    font-size: 0.85rem;
-    font-weight: 600;
+    font-size: 0.95rem !important;
+    font-weight: 700 !important;
 }
 
 .price-amount {
-    font-size: 1.4rem;
-    font-weight: 800;
-    line-height: 1;
+    font-size: 1.5rem !important;
+    font-weight: 800 !important;
+    line-height: 1 !important;
 }
 
 .promo-features {
-    list-style: none;
-    padding: 0;
-    margin: 10px 0 15px 0;
-    font-size: 0.7rem;
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 0 0 16px 0 !important;
+    font-size: 0.85rem !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
 }
 
 .promo-features li {
-    margin-bottom: 6px;
-    display: flex;
-    align-items: flex-start;
-    gap: 6px;
-    line-height: 1.3;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    color: #374151 !important;
+    line-height: 1.3 !important;
 }
 
 .promo-features li i {
-    font-size: 0.75rem;
-    flex-shrink: 0;
-    margin-top: 2px;
+    font-size: 0.9rem !important;
+    color: #22c55e !important;
+    flex-shrink: 0 !important;
 }
 
 .btn-promo-highlight,
 .btn-promo-standard {
-    font-size: 0.8rem;
-    padding: 8px 12px;
-    border-radius: 8px;
-    font-weight: 600;
+    display: block !important;
+    width: 100% !important;
+    padding: 10px 12px !important;
+    border-radius: 8px !important;
+    background-color: #e8f7ee !important;
+    color: #166534 !important;
+    font-size: 0.85rem !important;
+    font-weight: 700 !important;
+    text-align: center !important;
+    text-decoration: none !important;
+    border: none !important;
+    box-sizing: border-box !important;
 }
 
 .promo-empty-state {
     text-align: center;
     padding: 40px 20px;
-    grid-column: 1 / -1;
+    width: 100%;
 }
 
 .promo-empty-icon {
     font-size: 3.5rem;
-    color: var(--text-muted, #6c757d);
+    color: #6c757d;
     margin-bottom: 15px;
     opacity: 0.7;
 }
@@ -146,42 +176,27 @@ if ($koneksi instanceof PDO) {
 .promo-empty-title {
     font-size: 1.25rem;
     font-weight: 700;
-    color: var(--text-heading, #343a40);
+    color: #343a40;
     margin-bottom: 8px;
 }
 
 .promo-empty-desc {
     font-size: 0.9rem;
-    color: var(--text-muted, #6c757d);
+    color: #6c757d;
     max-width: 400px;
     margin: 0 auto;
 }
 
-@media (max-width: 576px) {
-    .promo-section {
-        padding-top: 5px !important;
-    }
-
+@media (min-width: 768px) {
     .promo-pricing-wrapper {
-        grid-template-columns: repeat(auto-fit, minmax(100%, 1fr));
-        gap: 12px;
-        padding: 0 5px;
-    }
-
-    .promo-card-highlight-glued,
-    .promo-card-standard-glued {
-        padding: 14px;
-    }
-
-    .promo-title {
-        font-size: 1rem;
-    }
-
-    .price-amount {
-        font-size: 1.3rem;
+        display: grid !important;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 320px)) !important;
+        justify-content: center !important;
+        gap: 20px !important;
     }
 }
 </style>
+
 <br>
 <section id="promo" class="promo-section">
     <div class="container">
@@ -200,9 +215,6 @@ if ($koneksi instanceof PDO) {
             <?php else: ?>
                 <?php foreach($promos_data as $promo): ?>
                     <?php 
-                        $card_class = ($promo['best_value'] == 'Ya') ? 'promo-card-highlight-glued' : 'promo-card-standard-glued';
-                        $btn_class = ($promo['best_value'] == 'Ya') ? 'btn-promo-highlight' : 'btn-promo-standard';
-                        
                         $harga_normal = (float)$promo['harga_normal'];
                         $potongan = (float)$promo['potongan'];
                         $harga_akhir = $harga_normal - $potongan;
@@ -213,14 +225,14 @@ if ($koneksi instanceof PDO) {
                         
                         $keterangan_list = explode("\n", $promo['keterangan']);
                     ?>
-                    <div class="<?= $card_class; ?>">
+                    <div class="promo-card-standard-glued">
                         <div>
                             <?php if($promo['best_value'] == 'Ya'): ?>
                                 <div class="promo-badge">BEST VALUE</div>
                             <?php endif; ?>
                             <div class="promo-card-header">
                                 <h3 class="promo-title"><?= htmlspecialchars($promo['nama_promo']); ?></h3>
-                                <p class="promo-desc <?= ($promo['best_value'] == 'Tidak') ? 'text-muted-custom' : ''; ?>">Potongan Spesial</p>
+                                <p class="promo-desc">Potongan Spesial</p>
                             </div>
                             <div class="promo-price-wrapper">
                                 <div class="promo-price-normal">
@@ -239,7 +251,7 @@ if ($koneksi instanceof PDO) {
                                 <?php endforeach; ?>
                             </ul>
                         </div>
-                        <a href="promo-araya?id=<?= $promo['id']; ?>" class="btn <?= $btn_class; ?> w-100">Klaim Voucher</a>
+                        <a href="promo-araya?id=<?= $promo['id']; ?>" class="btn btn-promo-standard w-100">Klaim Voucher</a>
                     </div>
                 <?php endforeach; ?>
             <?php endif; ?>

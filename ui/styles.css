@@ -794,6 +794,7 @@ section {
     box-shadow: 0 22px 48px rgba(6, 43, 29, 0.23) !important;
     margin-left: -15px;
     position: relative;
+    overflow: hidden;
 }
 
 .promo-card-highlight-glued::before {

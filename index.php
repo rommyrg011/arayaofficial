@@ -24,11 +24,9 @@
                 <a href="#ketersediaan"><i class="fas fa-check-circle"></i>
                 <span>Cek Ketersediaan</span><i class="fas fa-chevron-right"></i></a>
                 <a href="#games"><i class="fas fa-gamepad"></i>
-                <span>Game Terbaik</span><i class="fas fa-chevron-right"></i></a>
+                <span>Game Tersedia</span><i class="fas fa-chevron-right"></i></a>
                 <a href="#lokasi"><i class="fas fa-map-marker-alt"></i>
                 <span>Lokasi Playstation</span><i class="fas fa-chevron-right"></i></a>
-                <a href="#ulasan"><i class="fas fa-comments"></i>
-                <span>Ulasan Pelanggan</span><i class="fas fa-chevron-right"></i></a>
 </nav>
 </aside>
 
@@ -112,10 +110,9 @@
     <div class="container text-center" data-aos="fade-up" data-aos-duration="800">
         <h2 class="section-title">Tentang <span>Kami</span></h2>
         <p class="text-secondary" style="max-width: 900px; margin: 0 auto; line-height: 1.8; font-size: 1.1rem; text-align: justify;">
-            Araya Gamestation hadir sebagai pelopor hiburan digital terpadu yang menyajikan pengalaman premium, bersih, 
-            dan super nyaman bagi para pencari hiburan sejati. Tidak hanya memanjakan para gamer lewat jajaran konsol 
-            PlayStation, kami juga bertransformasi menjadi pusat multi-fasilitas dengan menyediakan tiga pilihan zona 
-            eksklusif: Reguler Room yang dinamis untuk keseruan mabar, VIP Room yang menawarkan privasi dan kenyamanan ekstra,
+            Araya Gamestation hadir sebagai pelopor hiburan digital terpadu yang menyajikan pengalaman bagi para pencari hiburan sejati.
+            Tidak hanya memanjakan para gamer lewat jajaran konsol PlayStation, kami juga bertransformasi menjadi pusat multi-fasilitas 
+            dengan menyediakan tiga pilihan zona eksklusif: Reguler Room yang dinamis untuk keseruan mabar, VIP Room yang menawarkan privasi dan kenyamanan ekstra,
             serta Premiere Room sebagai kasta tertinggi yang menyajikan kemewahan dengan fasilitas private karaoke di dalamnya.
             Kombinasi sempurna antara teknologi gaming terkini dan hiburan musik private ini menjadikan Araya Gamestation 
             destinasi paling ideal untuk melepas penat serta merayakan momen kebersamaan dalam satu atap.
@@ -330,31 +327,31 @@
             <h2 class="section-title" data-aos="fade-up">Game <span>Tersedia</span></h2>
             <div class="ps-game-grid mt-4">
                 <div class="ps-game-card" data-aos="fade-up" data-aos-delay="100">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1nstIiMFrA5Kh6pAkbiX7D4izUCzNZoQP6-6YO7jJNg&s=10" alt="PES 2026" class="ps-game-box-art">
+                    <img src="https://down-id.img.susercontent.com/file/sg-11134201-825ai-mt6q3qg4b30m4c" alt="E-FOOTBALL PES UPDATE" class="ps-game-box-art">
                     <div class="ps-game-label">E-FOOTBAL PES UPDATE</div>
                 </div>
                 <div class="ps-game-card" data-aos="fade-up" data-aos-delay="200">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMxMJsaKiFnT29qET3x8Aa8pc355b4ypBLVeRwPk-yEg&s=10" alt="TEKKEN 7" class="ps-game-box-art">
+                    <img src="https://www.static-src.com/wcsstore/Indraprastha/images/catalog/full//95/MTA-10554475/playstation_playstation_full01.jpg" alt="TEKKEN 7" class="ps-game-box-art">
                     <div class="ps-game-label">TEKKEN 7</div>
                 </div>
                 <div class="ps-game-card" data-aos="fade-up" data-aos-delay="300">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ535RYhFOb4pNHPT3jFUg7I_tpJGL2-pw1Z_WMz6lRSw&s=10" alt="NARUTO STORM 4" class="ps-game-box-art">
+                    <img src="https://m.media-amazon.com/images/I/81I4IWadtbL._SX466_.jpg" alt="NARUTO STORM 4" class="ps-game-box-art">
                     <div class="ps-game-label">NARUTO STORM 4</div>
                 </div>
                 <div class="ps-game-card" data-aos="fade-up" data-aos-delay="400">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRuB_yHiV64XL9x2WbidndIYmeG-bKXcYtRMgkQ6Vrk9g&s=10" alt="I TAKE TWO" class="ps-game-box-art">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQXNhdbJ-DnfiEu7lsIpTH2Lh5Uye7x2H1JEN2-2yvbFS67u_U2wMVwhlg&s=10" alt="I TAKE TWO" class="ps-game-box-art">
                     <div class="ps-game-label">I TAKE TWO</div>
                 </div>
                 <div class="ps-game-card" data-aos="fade-up" data-aos-delay="500">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSSb3f8m26eLFMvwhy1v1z65gOU04lWl-zn0gH-eD4zQQ&s=10" alt="A WAY OUT" class="ps-game-box-art">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT0mgeXg17BXBKK9hAgZYjpJZQCjlSGG8yQ86j0lbXaIi1JvVYUyqPGrPdl&s=10" alt="A WAY OUT" class="ps-game-box-art">
                     <div class="ps-game-label">A WAY OUT</div>
                 </div>
                 <div class="ps-game-card" data-aos="fade-up" data-aos-delay="600">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrbXyYC4b8eSHSd2T_t75wwfqTbCnX_i8MTThXo7mYVg&s=10" alt="RESIDENT EVIL 4 REMAKE" class="ps-game-box-art">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQigDdEi9EEkp4UQJMnxAU3fIVj9O9XfK6rjkukAXM31A8ep1THLaGyWum9&s=10" alt="RESIDENT EVIL 4 REMAKE" class="ps-game-box-art">
                     <div class="ps-game-label">RESIDENT Evil 4 REMAKE</div>
                 </div>
                 <div class="ps-game-card" data-aos="fade-up" data-aos-delay="600">
-                    <img src="https://image.api.playstation.com/vulcan/ap/rnd/202206/0204/uDFoGvnMTTCLVmTwjj0njGWC.png" alt="RESIDENT EVIL 2" class="ps-game-box-art">
+                    <img src="https://m.media-amazon.com/images/I/81N0cxaqEYL._AC_UF1000,1000_QL80_.jpg" alt="RESIDENT EVIL 2" class="ps-game-box-art">
                     <div class="ps-game-label">RESIDENT EVIL 2</div>
                 </div>
                 <div class="ps-game-card" data-aos="fade-up" data-aos-delay="600">
@@ -370,8 +367,12 @@
                     <div class="ps-game-label">OVERCOOKED 2</div>
                 </div>
                 <div class="ps-game-card" data-aos="fade-up" data-aos-delay="600">
-                    <img src="https://upload.wikimedia.org/wikipedia/id/4/4f/The_Last_of_Us_Part_II.png?utm_source=id.wikipedia.org&utm_campaign=index&utm_content=original" alt="THE LAST OF US 2" class="ps-game-box-art">
+                    <img src="https://www.static-src.com/wcsstore/Indraprastha/images/catalog/full//115/MTA-54758599/sony_ps4_the_last_of_us_part_ii_full01_sdc29fgp.jpg" alt="THE LAST OF US 2" class="ps-game-box-art">
                     <div class="ps-game-label">THE LAST OF US 2</div>
+                </div>
+                <div class="ps-game-card" data-aos="fade-up" data-aos-delay="600">
+                    <img src="https://www.static-src.com/wcsstore/Indraprastha/images/catalog/full//89/MTA-8024406/ea_sports_ps4_ea_sports_ufc_4_-_r3_full01_dxk2zued.jpg" alt="UFC 4" class="ps-game-box-art">
+                    <div class="ps-game-label">UFC 4</div>
                 </div>
             </div>
             <h6 class="mt-4 text-secondary">Dan masih banyak lagi, bisa request game</h6>
