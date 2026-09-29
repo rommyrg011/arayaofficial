@@ -76,7 +76,7 @@
             <div class="carousel-inner">
                 <div class="carousel-item active" style="background-image: url('img/bgaraya.webp');">
                     <div class="container hero-container-fixed">
-                        <div class="hero-content-left" data-aos="zoom-in" data-aos-duration="1000">
+                        <div class="hero-content-left" data-aos="zoom-in" data-aos-duration="10000">
                             <h1 class="text-accent carousel-title">Selamat datang di <br class="d-none d-md-block"> Araya Gamestation</h1>
                             <p class="hero-desc-custom">Destinasi hiburan digital terpadu dalam genggamanmu. Yuk, reservasi tempat mabar, nobar, atau karaoke serumu sekarang.</p>
                             
