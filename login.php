@@ -17,12 +17,11 @@ $redirect_folder = "";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = trim($_POST['username']);
     $password = trim($_POST['password']);
-    $level    = isset($_POST['level']) ? trim($_POST['level']) : '';
 
-    if (!empty($username) && !empty($password) && !empty($level)) {
+    if (!empty($username) && !empty($password)) {
         
-        $stmt = $koneksi->prepare("SELECT id_user, nama_lengkap, password, level, images FROM user WHERE username = ? AND level = ? LIMIT 1");
-        $stmt->bind_param("ss", $username, $level);
+        $stmt = $koneksi->prepare("SELECT id_user, nama_lengkap, password, level, images FROM user WHERE username = ? LIMIT 1");
+        $stmt->bind_param("s", $username);
         $stmt->execute();
         $result = $stmt->get_result();
 
@@ -41,14 +40,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $login_success = true; 
                 $redirect_folder = $row['level'] . "/";
             } else {
-                $error = "Username, Password, atau Hak Akses salah!";
+                $error = "Username atau Password salah!";
             }
         } else {
-            $error = "Username, Password, atau Hak Akses salah!";
+            $error = "Username atau Password salah!";
         }
         $stmt->close();
     } else {
-        $error = "Semua form wajib diisi termasuk Hak Akses!";
+        $error = "Semua form wajib diisi!";
     }
 }
 ?>
@@ -90,13 +89,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             background-size: 300px;
             background-repeat: no-repeat;
             background-color: #ffffff;
-        }
-
-        .form-control-user-select {
-            font-size: 0.8rem;
-            border-radius: 10rem;
-            padding: 0.5rem 1rem;
-            height: 50px !important;
         }
 
         @media (max-width: 1199.98px) {
@@ -157,16 +149,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                             <div class="form-group">
                                                 <input type="password" name="password" class="form-control form-control-user"
                                                     id="exampleInputPassword" placeholder="Password" required>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <select name="level" class="form-control form-control-user-select text-gray-600" required>
-                                                    <option value="" disabled selected hidden> Pilih hak akses...</option>
-                                                    <option value="admin">Admin</option>
-                                                    <option value="reservasi">Reservasi</option>
-                                                    <option value="rental">Rental</option>
-                                                    <option value="karyawan">Karyawan</option>
-                                                </select>
                                             </div>
 
                                             <button type="submit" class="btn btn-primary btn-user btn-block mt-4">
