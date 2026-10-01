@@ -10,7 +10,7 @@
     <hr class="sidebar-divider my-0">
 
     <li class="nav-item active">
-        <a class="nav-link" href="<?= asset('reservasi'); ?>">
+        <a class="nav-link" href="<?= asset('beruntung'); ?>">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span>
         </a>
@@ -21,14 +21,14 @@
     <div class="sidebar-heading">Transaksi Data</div>
 
     <li class="nav-item active">
-        <a class="nav-link" href="<?= asset('reservasi/reservasi'); ?>">
+        <a class="nav-link" href="<?= asset('beruntung/reservasi'); ?>">
             <i class="fas fa-briefcase"></i>
             <span>Reservasi</span>
         </a>
     </li>
     
     <li class="nav-item active">
-        <a class="nav-link" href="<?= asset('reservasi/riwayat'); ?>">
+        <a class="nav-link" href="<?= asset('beruntung/riwayat'); ?>">
             <i class="fas fa-history"></i>
             <span>Riwayat</span>
         </a>
@@ -37,7 +37,7 @@
 
     <div class="sidebar-heading">Timer Billing</div>
     <li class="nav-item active">
-        <a class="nav-link" href="<?= asset('reservasi/timerBeruntung'); ?>">
+        <a class="nav-link" href="<?= asset('beruntung/timerBeruntung'); ?>">
             <i class="fas fa-clock"></i>
             <span>Beruntung</span>
         </a>
