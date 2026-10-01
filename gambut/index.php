@@ -7,7 +7,7 @@ include 'template/topbar.php';
 ?>
 
 <div class="container-fluid">
-    <h1 class="h3 mb-4 text-gray-800">Selamat Datang di Dashboard Reservasi</h1>
+    <h1 class="h3 mb-4 text-gray-800">Selamat Datang di Dashboard Reservasi Cabang Gambut</h1>
     </div>
 
 <?php 
