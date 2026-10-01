@@ -7,26 +7,23 @@ $start  = isset($_POST['start']) ? intval($_POST['start']) : 0;
 $length = isset($_POST['length']) ? intval($_POST['length']) : 10;
 $search = isset($_POST['search']['value']) ? mysqli_real_escape_string($koneksi, $_POST['search']['value']) : '';
 
-// Array pembantu untuk mengubah tanggal SQL ke Bahasa Indonesia
 $bulan_indo = [
     1 => 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
     'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
 ];
 
-$resTotal = mysqli_query($koneksi, "SELECT COUNT(*) as total FROM reservasi WHERE status = 'Masuk Ruangan'");
+$resTotal = mysqli_query($koneksi, "SELECT COUNT(*) as total FROM reservasi WHERE status = 'Masuk Ruangan' AND cabang = 'Beruntung'");
 $totalData = ($resTotal) ? mysqli_fetch_assoc($resTotal)['total'] : 0;
-$sqlBase = "FROM reservasi WHERE status = 'Masuk Ruangan'";
 
-// Fitur pencarian bawaan DataTables
+$sqlBase = "FROM reservasi WHERE status = 'Masuk Ruangan' AND cabang = 'Beruntung'";
+
 if (!empty($search)) {
     $sqlBase .= " AND (nama_reservasi LIKE '%$search%' OR ruang LIKE '%$search%')";
 }
 
-// Total data terfilter
 $resFiltered = mysqli_query($koneksi, "SELECT COUNT(*) as total " . $sqlBase);
 $totalFiltered = ($resFiltered) ? mysqli_fetch_assoc($resFiltered)['total'] : 0;
 
-// Ambil data dengan Limit dan Urutan terbaru
 $sqlData = "SELECT * " . $sqlBase . " ORDER BY id_reservasi DESC LIMIT $start, $length";
 $resData = mysqli_query($koneksi, $sqlData);
 
@@ -57,7 +54,6 @@ if ($resData) {
         $data[] = [
             "no"             => $no++,
             "id_reservasi"   => $row['id_reservasi'],
-            "cabang"   => $row['cabang'],
             "nama_reservasi" => $row['nama_reservasi'],
             "tgl_bermain"    => $tgl_indonesia,
             "ruang"          => $row['ruang'],

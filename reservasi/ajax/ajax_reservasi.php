@@ -10,15 +10,12 @@ $search = isset($_POST['search']['value']) ? mysqli_real_escape_string($koneksi,
 
 $filter_tanggal = isset($_POST['filter_tanggal']) ? $_POST['filter_tanggal'] : 'semua';
 $filter_ruang   = isset($_POST['filter_ruang']) ? mysqli_real_escape_string($koneksi, $_POST['filter_ruang']) : 'semua';
-$filter_cabang  = isset($_POST['filter_cabang']) ? mysqli_real_escape_string($koneksi, $_POST['filter_cabang']) : 'semua';
 
 $hari_indo = [0 => 'Minggu', 1 => 'Senin', 2 => 'Selasa', 3 => 'Rabu', 4 => 'Kamis', 5 => 'Jumat', 6 => 'Sabtu'];
 $bulan_indo = [1 => 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
 
-// Query dasar (Dioptimasi tanpa fungsi memberatkan pada kolom)
-$sqlBase = "FROM reservasi WHERE (status != 'Masuk Ruangan' OR status = '' OR status IS NULL OR status = 'Dipanggil')";
+$sqlBase = "FROM reservasi WHERE (status != 'Masuk Ruangan' OR status = '' OR status IS NULL OR status = 'Dipanggil') AND cabang = 'Beruntung'";
 
-// Filter Tanggal
 if ($filter_tanggal === 'hari_ini') {
     $hari_ini = date('Y-m-d');
     $sqlBase .= " AND tgl_bermain = '$hari_ini'";
@@ -32,24 +29,16 @@ if ($filter_ruang !== 'semua') {
     $sqlBase .= " AND ruang = '$filter_ruang'";
 }
 
-if ($filter_cabang !== 'semua') {
-    $sqlBase .= " AND cabang = '$filter_cabang'";
-}
-
-// Hitung total sebelum pencarian
 $resTotal = mysqli_query($koneksi, "SELECT COUNT(id_reservasi) as total " . $sqlBase);
 $totalData = ($resTotal) ? mysqli_fetch_assoc($resTotal)['total'] : 0;
 
-// Filter Pencarian
 if (!empty($search)) {
-    $sqlBase .= " AND (cabang LIKE '%$search%' OR nama_reservasi LIKE '%$search%' OR ruang LIKE '%$search%' OR whatsapp LIKE '%$search%')";
+    $sqlBase .= " AND (nama_reservasi LIKE '%$search%' OR ruang LIKE '%$search%' OR whatsapp LIKE '%$search%')";
 }
 
-// Hitung total setelah pencarian
 $resFiltered = mysqli_query($koneksi, "SELECT COUNT(id_reservasi) as total " . $sqlBase);
 $totalFiltered = ($resFiltered) ? mysqli_fetch_assoc($resFiltered)['total'] : 0;
 
-// Ambil data
 $sqlData = "SELECT * " . $sqlBase . " ORDER BY id_reservasi DESC LIMIT $start, $length";
 $resData = mysqli_query($koneksi, $sqlData);
 
@@ -77,13 +66,12 @@ if ($resData) {
         $data[] = [
             "no"              => $no++,
             "id_reservasi"    => $row['id_reservasi'],
-            "cabang"          => !empty($row['cabang']) ? $row['cabang'] : '-', 
             "nama_reservasi"  => $row['nama_reservasi'],
             "tgl_bermain"     => $tgl_indonesia,
             "tgl_bermain_raw" => $tgl_db, 
             "ruang"           => $row['ruang'],
             "jml_orang"       => $row['jml_orang'],
-            "tambahan"    => $row['tambahan'],
+            "tambahan"        => $row['tambahan'],
             "w_kedatangan"    => $row['w_kedatangan'],
             "whatsapp"        => $row['whatsapp'],
             "dp"              => $html_dp,

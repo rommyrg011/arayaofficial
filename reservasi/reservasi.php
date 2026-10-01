@@ -19,7 +19,7 @@ include 'template/topbar.php';
 
     <div class="card shadow mb-4">
         <div class="card-header py-3 text-center">
-            <h6 class="m-0 font-weight-bold" style="font-size:25px;">Reservasi</h6>
+            <h6 class="m-0 font-weight-bold" style="font-size:25px;">Reservasi Cabang Beruntung</h6>
             <div class="mt-3">
                 <button class="btn btn-success btn-sm" id="btnMessage" disabled><i class="fab fa-whatsapp"></i> Hubungi </button>
                 <button class="btn btn-info btn-sm" id="btnEditDP" disabled><i class="fas fa-edit"></i> Upload DP </button>
@@ -60,17 +60,6 @@ include 'template/topbar.php';
                             <a class="dropdown-item filter-pilih-ruang" data-ruang="PREMIERE 2">PREMIERE 2</a>
                         </div>
                     </div>
-
-                    <div class="btn-group" role="group">
-                        <button id="btnGroupDropCabang" type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Cabang
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="btnGroupDropCabang">
-                            <a class="dropdown-item filter-pilih-cabang" data-cabang="semua">Semua Cabang</a>
-                            <a class="dropdown-item filter-pilih-cabang" data-cabang="Gambut">Gambut</a>
-                            <a class="dropdown-item filter-pilih-cabang" data-cabang="Beruntung">Beruntung</a>
-                        </div>
-                    </div>
                 </div>
             </div>
 
@@ -81,7 +70,6 @@ include 'template/topbar.php';
                     <thead class="bg-light">
                         <tr>
                             <th width="5%">No</th>
-                            <th>Cabang</th> 
                             <th>Nama</th>
                             <th>Tanggal</th>
                             <th>Ruang</th>
@@ -227,7 +215,6 @@ $(document).ready(function() {
     
     var filterAktif = 'semua';
     var filterRuangAktif = 'semua';
-    var filterCabangAktif = 'semua';
 
     if ($.fn.DataTable.isDataTable('#dataTable')) {
         $('#dataTable').DataTable().destroy();
@@ -242,7 +229,6 @@ $(document).ready(function() {
             "data": function(d) {
                 d.filter_tanggal = filterAktif;
                 d.filter_ruang = filterRuangAktif; 
-                d.filter_cabang = filterCabangAktif;
             },
             "error": function(xhr) {
                 console.error(xhr.responseText);
@@ -251,7 +237,6 @@ $(document).ready(function() {
         },
         "columns": [
             { "data": "no", "className": "text-center" },
-            { "data": "cabang", "className": "text-center" },
             { "data": "nama_reservasi", "className": "text-center" },
             { "data": "tgl_bermain", "className": "text-center" },
             { "data": "ruang", "className": "text-center" },
@@ -302,20 +287,6 @@ $(document).ready(function() {
         table.ajax.reload(); 
     });
 
-    $('.filter-pilih-cabang').click(function(e) {
-        e.preventDefault();
-        var cabangDipilih = $(this).data('cabang');
-        filterCabangAktif = cabangDipilih;
-        
-        if (cabangDipilih === 'semua') {
-            $('#btnGroupDropCabang').removeClass('active').text('Semua Cabang');
-        } else {
-            $('#btnGroupDropCabang').addClass('active').text(cabangDipilih);
-        }
-        resetSeleksiBaris();
-        table.ajax.reload(); 
-    });
-
     function resetSeleksiBaris() {
         selectedId = null;
         selectedRowData = null;
@@ -346,7 +317,7 @@ $(document).ready(function() {
             $('#whatsapp_pelanggan').val(selectedRowData.whatsapp);
             
             var pesanTemplate = "Halo Kak " + selectedRowData.nama_reservasi + ",\n\n" +
-                                "Berikut adalah detail reservasi kaka:\n" +
+                                "Berikut adalah detail reservasi kaka di Araya Gamestation Cabang Beruntung:\n" +
                                 "📅 Tanggal: " + selectedRowData.tgl_bermain + "\n" +
                                 "🚪 Ruangan: " + selectedRowData.ruang+ "\n" +
                                 "👥 Jumlah Orang: " + selectedRowData.jml_orang + "\n" +

@@ -37,12 +37,6 @@
 
     <div class="sidebar-heading">Timer Billing</div>
     <li class="nav-item active">
-        <a class="nav-link" href="<?= asset('reservasi/timerGambut'); ?>">
-            <i class="fas fa-clock"></i>
-            <span>Gambut</span>
-        </a>
-    </li>
-    <li class="nav-item active">
         <a class="nav-link" href="<?= asset('reservasi/timerBeruntung'); ?>">
             <i class="fas fa-clock"></i>
             <span>Beruntung</span>
