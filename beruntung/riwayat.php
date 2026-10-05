@@ -10,7 +10,7 @@ include 'template/topbar.php';
 
     <div class="card shadow mb-4">
         <div class="card-header py-3 text-center">
-            <h6 class="m-0 font-weight-bold" style="font-size:25px;">Riwayat Reservasi Cabang Beruntung</h6>
+            <h6 class="m-0 font-weight-bold" style="font-size:25px;">Riwayat</h6>
         </div>
         <div class="card-body">
             <div class="table-responsive">

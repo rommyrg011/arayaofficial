@@ -2,9 +2,9 @@
 
     <a class="sidebar-brand d-flex align-items-center justify-content-center" href="<?= asset(''); ?>">
         <div class="sidebar-brand-icon rotate-n-15">
-            <i class="fa fa-gamepad" aria-hidden="true"></i>
+            <i class="fa fa-calendar-check" aria-hidden="true"></i>
         </div>
-        <div class="sidebar-brand-text mx-3">Reservasi</div>
+        <div class="sidebar-brand-text mx-3">Beruntung</div>
     </a>
 
     <hr class="sidebar-divider my-0">
@@ -39,7 +39,7 @@
     <li class="nav-item active">
         <a class="nav-link" href="<?= asset('beruntung/timerBeruntung'); ?>">
             <i class="fas fa-clock"></i>
-            <span>Beruntung</span>
+            <span>Timer</span>
         </a>
     </li>
 
