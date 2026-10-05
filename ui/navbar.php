@@ -1,6 +1,8 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top shadow-sm">
     <div class="container">
-        <a class="navbar-brand font-weight-bold" href="./">ARAYA GAMESTATION</a>
+    <a class="navbar-brand font-weight-bold" href="./">
+    <img src="img/lnn.webp" alt="ARAYA GAMESTATION" style="height: 40px; width: auto;">
+</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>

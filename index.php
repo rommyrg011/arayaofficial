@@ -4,13 +4,15 @@
 
    <?php include 'ui/navbar.php'; ?>
 
-<header class="mobile-top-header">
-    <div class="mobile-brand">ARAYA GAMESTATION</div>
-        <div class="mobile-header-actions">
-            <button type="button" class="mobile-header-btn mobile-search-btn" id="mobileSearchButton" aria-label="Cari">
-                <i class="fas fa-search"></i>
-            </button>
-        </div>
+   <header class="mobile-top-header">
+    <div class="mobile-brand">
+        <img src="img/lnn.webp" alt="ARAYA GAMESTATION" style="height: 40px; width: auto;">
+    </div>
+    <div class="mobile-header-actions">
+        <button type="button" class="mobile-header-btn mobile-search-btn" id="mobileSearchButton" aria-label="Cari">
+            <i class="fas fa-search"></i>
+        </button>
+    </div>
 </header>
 
 <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>

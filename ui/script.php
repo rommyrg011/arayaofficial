@@ -31,7 +31,7 @@
         }
 
         function fetchTimers() {
-            $.post('reservasi/api_timer.php', { action: 'load' }, function(data) {
+            $.post('beruntung/api_timer.php', { action: 'load' }, function(data) {
                 if (data && data.timers) {
                     timers = data.timers;
                     updateDisplay();
