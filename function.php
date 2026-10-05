@@ -10,7 +10,7 @@ $host = $_SERVER['HTTP_HOST'];
 $project_dir = dirname($_SERVER['SCRIPT_NAME']);
 $project_dir = str_replace('\\', '/', $project_dir);
 
-$modul_folders = ['admin', 'rental', 'karyawan', 'gambut', 'beruntung'];
+$modul_folders = ['admin', 'supervisor', 'rental', 'karyawan', 'gambut', 'beruntung'];
 
 if (in_array(basename($project_dir), $modul_folders)) {
     $project_dir = dirname($project_dir);

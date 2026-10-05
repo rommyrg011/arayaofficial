@@ -92,9 +92,12 @@ include 'template/topbar.php';
                         <select class="form-control" name="level" id="level" required>
                             <option value="">-- Pilih Level --</option>
                             <option value="admin">Admin</option>
+                            <option value="supervisor">Supervisor</option>
                             <option value="reservasi">Reservasi</option>
                             <option value="rental">Rental</option>
                             <option value="karyawan">Karyawan</option>
+                            <option value="gambut">Gambut</option>
+                            <option value="beruntung">Beruntung</option>
                         </select>
                     </div>
                 </div>
