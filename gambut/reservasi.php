@@ -19,7 +19,7 @@ include 'template/topbar.php';
 
     <div class="card shadow mb-4">
         <div class="card-header py-3 text-center">
-            <h6 class="m-0 font-weight-bold" style="font-size:25px;">Reservasi Cabang Gambut</h6>
+            <h6 class="m-0 font-weight-bold" style="font-size:25px;">Reservasi</h6>
             <div class="mt-3">
                 <button class="btn btn-success btn-sm" id="btnMessage" disabled><i class="fab fa-whatsapp"></i> Hubungi </button>
                 <button class="btn btn-info btn-sm" id="btnEditDP" disabled><i class="fas fa-edit"></i> Upload DP </button>
