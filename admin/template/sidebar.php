@@ -63,12 +63,15 @@
         <div id="pengeluaran" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <a class="collapse-item" href="<?= asset('admin/adminTransfer'); ?>">Admin Transfer</a>
+                <a class="collapse-item" href="<?= asset('admin/listrik'); ?>">Listrik</a>
+                <a class="collapse-item" href="<?= asset('admin/jagaMalam'); ?>">Jaga Malam</a>
                 <a class="collapse-item" href="<?= asset('admin/netflix'); ?>">Netflix</a>
                 <a class="collapse-item" href="<?= asset('admin/pdam'); ?>">PDAM</a>
                 <a class="collapse-item" href="<?= asset('admin/wifi'); ?>">Wifi</a>
                 <a class="collapse-item" href="<?= asset('admin/service'); ?>">Service</a>
                 <a class="collapse-item" href="<?= asset('admin/pengeluaranGaji'); ?>">Gaji Karyawan</a>
                 <a class="collapse-item" href="<?= asset('admin/pengeluaranSewa'); ?>">Sewa Toko</a>
+                <a class="collapse-item" href="<?= asset('admin/lainnya'); ?>">Lainnya</a>
             </div>
         </div>
     </li>
