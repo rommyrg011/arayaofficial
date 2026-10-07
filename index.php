@@ -29,6 +29,8 @@
                 <span>Game Tersedia</span><i class="fas fa-chevron-right"></i></a>
                 <a href="#lokasi"><i class="fas fa-map-marker-alt"></i>
                 <span>Lokasi Playstation</span><i class="fas fa-chevron-right"></i></a>
+                <a href="#faq"><i class="fas fa-question-circle"></i>
+                <span>FAQ</span><i class="fas fa-chevron-right"></i></a>
 </nav>
 </aside>
 
@@ -43,7 +45,6 @@
             <input type="search" id="mobileSearchInput" placeholder="Cari fasilitas, harga, game, lokasi, sewa ps, reservasi..." autocomplete="off">
         </div>
         <div class="mobile-search-results" id="mobileSearchResults">
-            <!-- Navigasi & Bagian Utama -->
             <a href="#tentang" data-search="tentang kami profil araya gamestation sejarah hiburan digital"><i class="fas fa-info-circle"></i><span>Tentang Kami</span></a>
             <a href="#fasilitas" data-search="fasilitas vip premiere wifi parkir cctv tv 43 inch kipas ac lemari penyimpanan"><i class="fas fa-concierge-bell"></i><span>Fasilitas Tersedia</span></a>
             <a href="#pricelist" data-search="daftar harga paket sewa room reguler vip premiere jam hari"><i class="fas fa-book"></i><span>Daftar Harga / Pricelist</span></a>
@@ -52,8 +53,7 @@
             <a href="#ketersediaan" data-search="cek ketersediaan unit kosong status ps cabang gambut beruntung"><i class="fas fa-check-circle"></i><span>Cek Ketersediaan Unit</span></a>
             <a href="#reservasi" data-search="reservasi online booking pesan tempat tanpa antri"><i class="fas fa-calendar-alt"></i><span>Reservasi</span></a>
             <a href="#lokasi" data-search="lokasi alamat map cabang 1 gambut banjar cabang 2 beruntung banjarmasin selatan"><i class="fas fa-map-marker-alt"></i><span>Lokasi Cabang</span></a>
-
-            <!-- Halaman / Fitur Spesifik -->
+            <a href="#faq" data-search="faq tanya jawab pertanyaan reservasi pembayaran jadwal"><i class="fas fa-question-circle"></i><span>FAQ</span></a>
             <a href="sewaps-araya" data-search="halaman sewa ps ps4 antar ke rumah pemesanan"><i class="fas fa-paper-plane"></i><span>Sewa Playstation</span></a>
             <a href="reservasi-araya" data-search="halaman reservasi booking online unit playstation"><i class="fas fa-paper-plane"></i><span>Reservasi</span></a>
         </div>
@@ -481,6 +481,94 @@
 
     <div class="separator"></div>
 
+    <style>
+        .faq-details {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            margin-bottom: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        .faq-details:hover {
+            box-shadow: var(--card-shadow);
+            border-color: var(--accent-main);
+        }
+        .faq-summary {
+            padding: 18px 20px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-heading);
+            cursor: pointer;
+            list-style: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .faq-summary::-webkit-details-marker {
+            display: none;
+        }
+        .faq-summary::after {
+            content: '\f078';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            color: var(--accent-main);
+            transition: transform 0.3s ease;
+        }
+        .faq-details[open] .faq-summary::after {
+            transform: rotate(180deg);
+        }
+        .faq-body {
+            padding: 0 20px 20px 20px;
+            color: var(--text-muted);
+            font-size: 1rem;
+            line-height: 1.6;
+            border-top: 1px dashed var(--border-color);
+            margin-top: 10px;
+            padding-top: 15px;
+        }
+    </style>
+    <section id="faq" class="py-5 bg-solid">
+        <div class="container" data-aos="fade-up" data-aos-duration="800">
+            <h2 class="section-title text-center mb-5">FAQ</h2>
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    
+                    <details class="faq-details">
+                        <summary class="faq-summary">1. Bagaimana cara melakukan reservasi room di araya gamestation ?</summary>
+                        <div class="faq-body">
+                            Reservasi dapat dilakukan secara online melalui halaman pemesanan di website kami. Pilih lokasi cabang, jenis room atau console, tentukan tanggal serta jam main, lalu selesaikan pembayaran untuk mengamankan slot Anda.
+                        </div>
+                    </details>
+
+                    <details class="faq-details">
+                        <summary class="faq-summary">2. Apakah saya bisa langsung datang tanpa reservasi terlebih dahulu?</summary>
+                        <div class="faq-body">
+                            Bisa, namun reservasi sangat disarankan untuk memastikan anda mendapatkan room atau console yang diinginkan tanpa perlu mengantri di tempat.
+                        </div>
+                    </details>
+
+                    <details class="faq-details">
+                        <summary class="faq-summary">3. Metode pembayaran apa saja yang didukung oleh sistem?</summary>
+                        <div class="faq-body">
+                            Sistem kami mendukung berbagai metode pembayaran, bisa tunai non-tunai ( QRIS )
+                        </div>
+                    </details>
+
+                    <details class="faq-details">
+                        <summary class="faq-summary">4. Apakah reservasi yang sudah dibayar bisa dibatalkan atau diubah jadwalnya (reschedule)?</summary>
+                        <div class="faq-body">
+                            Pembatalan atau perubahan jadwal dapat dilakukan maksimal 1 jam sebelum sesi main dimulai. Ketentuan pengembalian dana (refund) mengikuti batasan waktu dan kebijakan yang berlaku di sistem.
+                        </div>
+                    </details>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="separator"></div>
+
    <?php include 'ui/footer.php'; ?>
 
     <?php include 'ui/mobile.php'; ?>
@@ -552,7 +640,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Fungsi filter pencarian live berdasarkan keyword di atribut data-search atau teks judul
     function filterSearch(query) {
         var q = query.toLowerCase().trim();
         searchItems.forEach(function (item) {
@@ -571,7 +658,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Tutup overlay pencarian saat hasil pencarian diklik
     searchItems.forEach(function (item) {
         item.addEventListener('click', function () {
             document.body.classList.remove('mobile-search-open');

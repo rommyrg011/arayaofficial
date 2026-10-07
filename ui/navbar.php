@@ -35,6 +35,9 @@
                 <li class="nav-item">
                     <a class="nav-link px-3" href="#lokasi">Lokasi</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link px-3" href="#faq">FAQ</a>
+                </li>
                 <!-- <li class="nav-item ml-lg-2 mt-2 mt-lg-0">
                     <a class="btn btn-sm btn-success px-2 py-1 font-weight-bold" href="login" style="font-size: 0.85rem;">
                         <i class="fas fa-user-circle mr-1"></i> Login
