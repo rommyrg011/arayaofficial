@@ -37,7 +37,7 @@
             color: #6c757d;
             border: 2px solid #1f2229;
             padding: 6px 20px; 
-            font-size: 8px; 
+            font-size: 12px; 
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 1.5px;
@@ -89,7 +89,7 @@
             justify-content: center;
             align-items: center;
             transition: box-shadow 0.3s ease, border-color 0.3s ease;
-            position: relative; /* Ditambahkan agar nomor meja bisa diposisikan di sudut */
+            position: relative; 
         }
 
         .card-display.active-card {
@@ -97,7 +97,13 @@
             box-shadow: 0 0 15px rgba(0, 255, 204, 0.15) inset, 0 0 20px rgba(0, 255, 204, 0.2);
         }
 
-        /* Class baru untuk nomor meja di kanan atas */
+        /* Style khusus jika meja nonaktif / maintenance */
+        .card-display.inactive-card {
+            border-color: #555555;
+            background-color: #111111;
+            opacity: 0.6;
+        }
+
         .badge-meja {
             position: absolute;
             top: 5px;
@@ -111,17 +117,12 @@
         .icon-status {
             font-size: 32px; 
             margin-bottom: 12px;
-            margin-top: 10px; /* Tambahan margin agar tidak menabrak nomor meja */
+            margin-top: 10px; 
         }
         
-        .icon-check {
-            color: #ffffff;
-        }
-        
-        .icon-active {
-            color: #dc3545;
-            animation: pulse-danger 1.5s infinite;
-        }
+        .icon-check { color: #ffffff; }
+        .icon-active { color: #dc3545; animation: pulse-danger 1.5s infinite; }
+        .icon-inactive { color: #888888; }
 
         @keyframes pulse-danger {
             0% { transform: scale(1); text-shadow: 0 0 0 rgba(220, 53, 69, 0.7); }
@@ -153,6 +154,14 @@
             text-transform: uppercase;
             margin-bottom: 12px;
         }
+        .text-nonaktif {
+            font-size: 11px;
+            font-weight: 700;
+            color: #ff4d4d; 
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
         .text-subtitle {
             color: #ffffff; 
             font-size: 14px; 
@@ -177,39 +186,15 @@
         @media (max-width: 768px) {
             .grid-container { grid-template-columns: repeat(2, 1fr); gap: 10px; }
         }
-
-        @media (max-width: 576px) {
-            .main-container { padding: 15px 0; width: 92%; } 
-            .grid-container { grid-template-columns: repeat(2, 1fr); gap: 8px; }
-            
-            .card-display { 
-                padding: 12px 4px; 
-                border-radius: 8px; 
-                border-width: 2px; 
-            }
-            
-            .badge-meja { font-size: 14px; top: 6px; right: 10px; }
-            .icon-status { font-size: 22px; margin-bottom: 6px; margin-top: 8px; }
-            .text-countdown { font-size: 13px; margin-bottom: 4px; letter-spacing: 1px; }
-            .text-selesai { font-size: 8px; margin-bottom: 6px; letter-spacing: 0.5px; }
-            .text-tersedia { font-size: 8px; margin-bottom: 6px; letter-spacing: 0.5px; }
-            .text-subtitle { font-size: 9px; margin-top: 2px; }
-            
-            .pagination-container { gap: 8px; margin-bottom: 15px; }
-            .page-btn { padding: 5px 12px; font-size: 9px; letter-spacing: 0.5px; }
-        }
     </style>
 </head>
 <body>
     <div class="main-container">
-        
         <div class="pagination-container">
             <button class="page-btn active" id="btn-beruntung" onclick="switchPage('beruntung')">Beruntung</button>
             <button class="page-btn" id="btn-gambut" onclick="switchPage('gambut')">Gambut</button>
         </div>
-
         <div class="grid-container fade-slide-in" id="display-area"></div>
-
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
@@ -220,22 +205,13 @@
         
         window.speechUtterance = null; 
 
-        // === FUNGSI BANTUAN UNTUK CEK STATUS RUNNING API ===
         function isTimerRunning(val) {
             return val == 1 || val === '1' || val === true || val === 'true';
         }
 
         function showAddedTimeAlert(noMeja, judulMeja, addedSeconds) {
             let minutes = Math.round(addedSeconds / 60);
-            let timeText = "";
-            
-            if (minutes >= 60) {
-                let jam = Math.floor(minutes / 60);
-                let sisaMenit = minutes % 60;
-                timeText = sisaMenit > 0 ? `${jam} Jam ${sisaMenit} Menit` : `${jam} Jam`;
-            } else {
-                timeText = `${minutes} Menit`;
-            }
+            let timeText = minutes >= 60 ? `${Math.floor(minutes / 60)} Jam ${minutes % 60} Menit` : `${minutes} Menit`;
 
             Swal.fire({
                 toast: true,
@@ -253,10 +229,9 @@
 
             if ('speechSynthesis' in window) {
                 window.speechSynthesis.cancel();
-                let textToSpeak = `Waktu untuk nomor ${noMeja}, ${judulMeja}, telah ditambah ${timeText}.`;
-                let utterance = new SpeechSynthesisUtterance(textToSpeak);
+                let utterance = new SpeechSynthesisUtterance(`Waktu untuk nomor ${noMeja}, ${judulMeja}, telah ditambah ${timeText}.`);
                 utterance.lang = 'id-ID';
-                utterance.rate = 5.0;
+                utterance.rate = 1.0;
                 window.speechSynthesis.speak(utterance);
             }
         }
@@ -275,44 +250,23 @@
 
             if ('speechSynthesis' in window) {
                 window.speechSynthesis.cancel(); 
-
                 let textToSpeak = `Waktu tv nomor ${noMeja}, ${judulMeja}, cabang ${cabang}, sudah mendekati habis. Mohon segera diselesaikan. Terima kasih.`;
-                
                 window.speechUtterance = new SpeechSynthesisUtterance(textToSpeak);
                 window.speechUtterance.lang = 'id-ID'; 
                 window.speechUtterance.rate = 0.9; 
-                window.speechUtterance.pitch = 1; 
                 
                 let isAlertClosed = false;
-
                 const closeAlert = () => {
                     if (!isAlertClosed) {
                         isAlertClosed = true;
-                        setTimeout(() => {
-                            Swal.close();
-                        }, 3000); 
+                        setTimeout(() => { Swal.close(); }, 3000); 
                     }
                 };
 
-                window.speechUtterance.onend = function() {
-                    closeAlert();
-                };
-
-                window.speechUtterance.onerror = function() {
-                    console.log("Suara diblokir browser atau terjadi error.");
-                    closeAlert();
-                };
-
-                setTimeout(() => {
-                    if (!isAlertClosed) {
-                        Swal.close();
-                    }
-                }, 12000);
-
+                window.speechUtterance.onend = () => closeAlert();
+                setTimeout(() => { if (!isAlertClosed) Swal.close(); }, 12000);
                 window.speechSynthesis.speak(window.speechUtterance);
-                
             } else {
-                console.log("Fitur Text-to-Speech tidak didukung.");
                 setTimeout(() => { Swal.close(); }, 5000);
             }
         }
@@ -326,7 +280,6 @@
 
         function switchPage(cabang) {
             if (currentPage === cabang) return; 
-            
             currentPage = cabang;
 
             $('.page-btn').removeClass('active');
@@ -343,14 +296,12 @@
         function fetchTimers() {
             $.post('beruntung/api_timer.php', { action: 'load' }, function(data) {
                 if (data && data.timers) {
-                    
                     for (const id in data.timers) {
                         const tNew = data.timers[id];
                         const tOld = timers[id];
 
                         if (tOld && tNew.cabang === currentPage) {
                             let timeAdded = 0;
-                            
                             const isNewRunning = isTimerRunning(tNew.isRunning);
                             const isOldRunning = isTimerRunning(tOld.isRunning);
                             
@@ -376,8 +327,8 @@
         function updateDisplay() {
             let htmlContent = '';
             const now = Date.now();
-            
             let timersList = [];
+
             for (const id in timers) {
                 if (timers[id].cabang === currentPage) {
                     let tData = Object.assign({}, timers[id]);
@@ -386,10 +337,7 @@
                 }
             }
 
-            timersList.sort((a, b) => {
-                return (parseInt(a.noMeja) || 0) - (parseInt(b.noMeja) || 0);
-            });
-
+            timersList.sort((a, b) => (parseInt(a.noMeja) || 0) - (parseInt(b.noMeja) || 0));
             let countMeja = timersList.length;
 
             timersList.forEach(t => {
@@ -400,16 +348,26 @@
                 const endTimeInt = parseInt(t.endTime) || 0;
                 const timeLeftInt = parseInt(t.timeLeft) || 0;
                 const running = isTimerRunning(t.isRunning);
+                const isActive = t.isActive !== false; // Cek status aktif/nonaktif dari database
 
-                if (running || timeLeftInt > 0) {
+                // Logika Tampilan Berdasarkan Status Aktif & Waktu
+                if (!isActive) {
+                    cardClass = 'inactive-card';
+                    statusHtml = `
+                        <div class="badge-meja">${t.noMeja}</div>
+                        <div class="icon-status">
+                            <i class="fas fa-ban icon-inactive"></i>
+                        </div>
+                        <div class="text-nonaktif">NONAKTIF</div>
+                        <div class="text-subtitle">${t.judulMeja}</div>
+                    `;
+                } else if (running || timeLeftInt > 0) {
                     let endTimeStr = "-- : --";
                     let currentDisplayTime = 0;
                     
                     if (running) {
                         const end = new Date(endTimeInt);
-                        const h = end.getHours().toString().padStart(2, '0');
-                        const m = end.getMinutes().toString().padStart(2, '0');
-                        endTimeStr = `${h} : ${m}`;
+                        endTimeStr = `${end.getHours().toString().padStart(2, '0')} : ${end.getMinutes().toString().padStart(2, '0')}`;
                         currentDisplayTime = Math.max(0, Math.round((endTimeInt - now) / 1000));
 
                         if (currentDisplayTime <= 120 && currentDisplayTime > 115) {
@@ -418,17 +376,13 @@
                                 warnedTables[id] = endTimeInt; 
                             }
                         }
-
                     } else {
                         const end = new Date(now + (timeLeftInt * 1000));
-                        const h = end.getHours().toString().padStart(2, '0');
-                        const m = end.getMinutes().toString().padStart(2, '0');
-                        endTimeStr = `${h} : ${m} (JEDA)`;
+                        endTimeStr = `${end.getHours().toString().padStart(2, '0')} : ${end.getMinutes().toString().padStart(2, '0')} (JEDA)`;
                         currentDisplayTime = timeLeftInt;
                     }
 
                     cardClass = 'active-card';
-
                     statusHtml = `
                         <div class="badge-meja">${t.noMeja}</div>
                         <div class="icon-status">
@@ -440,7 +394,6 @@
                     `;
                 } else {
                     cardClass = ''; 
-                    
                     statusHtml = `
                         <div class="badge-meja">${t.noMeja}</div>
                         <div class="icon-status" style="margin-bottom: 8px;">
@@ -451,11 +404,7 @@
                     `;
                 }
 
-                htmlContent += `
-                    <div class="card-display ${cardClass}">
-                        ${statusHtml}
-                    </div>
-                `;
+                htmlContent += `<div class="card-display ${cardClass}">${statusHtml}</div>`;
             });
 
             if (countMeja === 0) {
@@ -472,7 +421,6 @@
 
         $(document).ready(function() {
             fetchTimers(); 
-            
             setInterval(fetchTimers, 3000); 
             setInterval(updateDisplay, 1000); 
 

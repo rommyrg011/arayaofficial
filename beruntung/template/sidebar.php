@@ -45,6 +45,23 @@
 
     <hr class="sidebar-divider d-none d-md-block">
 
+    <div class="sidebar-heading">Promo</div>
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#voucher" aria-expanded="true" aria-controls="voucher">
+            <i class="fas fa-solid fa-folder"></i>
+            <span>Voucher</span>
+        </a>
+        <div id="voucher" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <a class="collapse-item" href="<?= asset('beruntung/kodeVoucher'); ?>">Kode Voucher</a>
+                <a class="collapse-item" href="<?= asset('beruntung/pelangganVoucher'); ?>">Pelanggan Voucher</a>
+                <a class="collapse-item" href="<?= asset('beruntung/riwayatPelanggan'); ?>">Riwayat Pelanggan</a>
+            </div>
+        </div>
+    </li>
+
+    <hr class="sidebar-divider d-none d-md-block">
+
     <div class="text-center d-none d-md-inline">
         <button class="rounded-circle border-0" id="sidebarToggle"></button>
     </div>

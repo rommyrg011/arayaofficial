@@ -1,7 +1,7 @@
 <?php
 ob_start();
 error_reporting(0);
-require_once __DIR__ . '/../function.php'; 
+require_once __DIR__ . '/../function.php';
 
 $draw   = isset($_POST['draw']) ? intval($_POST['draw']) : 0;
 $start  = isset($_POST['start']) ? intval($_POST['start']) : 0;
@@ -17,6 +17,59 @@ $is_init_load = (!isset($_POST['bulan']) && !isset($_POST['tahun']));
 if ($is_init_load) {
     $bulan = date('m');
     $tahun = date('Y');
+}
+
+$levelMingguan = ['transfer'];
+$levelBulanan  = ['netflix', 'pdam', 'wifi', 'service', 'listrik', 'jagamalam', 'lainnya'];
+$levelSewa     = ['sewa'];
+$levelGaji     = ['staff'];
+
+function totalPengeluaran($koneksi, $levels, $cb, $bulan, $tahun)
+{
+    $in = "'" . implode("','", array_map('strtolower', $levels)) . "'";
+    $cbEsc = mysqli_real_escape_string($koneksi, $cb);
+    $q = "SELECT total_bersih FROM pengeluaran WHERE LOWER(level) IN ($in) AND LOWER(cabang) = LOWER('$cbEsc')";
+    if (!empty($bulan)) $q .= " AND MONTH(STR_TO_DATE(tanggal, '%Y-%m-%d')) = '$bulan'";
+    if (!empty($tahun)) $q .= " AND YEAR(STR_TO_DATE(tanggal, '%Y-%m-%d')) = '$tahun'";
+    $res = mysqli_query($koneksi, $q);
+    $total = 0;
+    if ($res) {
+        while ($r = mysqli_fetch_assoc($res)) {
+            $total += floatval(preg_replace('/[^0-9]/', '', $r['total_bersih']));
+        }
+    }
+    return $total;
+}
+
+function hitungCabang($koneksi, $row, $bulan, $tahun, $levelMingguan, $levelBulanan, $levelSewa, $levelGaji)
+{
+    $cb  = $row['cabang'];
+    $pk  = floatval($row['pendapatan_kotor']);
+    $opM = floatval($row['operasional_mingguan']);
+
+    $opM += totalPengeluaran($koneksi, $levelMingguan, $cb, $bulan, $tahun);
+    $opB  = totalPengeluaran($koneksi, $levelBulanan, $cb, $bulan, $tahun);
+    $sewa = totalPengeluaran($koneksi, $levelSewa, $cb, $bulan, $tahun);
+    $gaji = totalPengeluaran($koneksi, $levelGaji, $cb, $bulan, $tahun);
+
+    $tp = $opM + $opB + $sewa + $gaji;
+    $pb = $pk - $tp;
+
+    return [
+        "cabang"               => $cb,
+        "pendapatan_kotor"     => $pk,
+        "operasional_mingguan" => $opM,
+        "operasional_bulanan"  => $opB,
+        "sewa"                 => $sewa,
+        "gaji"                 => $gaji,
+        "total_pengeluaran"    => $tp,
+        "pendapatan_bersih"    => $pb
+    ];
+}
+
+function rp($angka)
+{
+    return "Rp. " . number_format($angka, 0, ',', '.');
 }
 
 $whereConditions = ["u.level IN ('karyawan')"];
@@ -36,100 +89,37 @@ if (!empty($search)) {
 
 $sqlBase = "FROM karyawan k JOIN user u ON k.id_user = u.id_user WHERE " . implode(' AND ', $whereConditions);
 
+$sqlSelect = "SELECT IFNULL(k.cabang, '-') as cabang, SUM(CASE WHEN LOWER(k.tipe_shift) = 'partner' THEN IFNULL(CAST(NULLIF(k.omset, '') AS UNSIGNED), 0) / 2 ELSE IFNULL(CAST(NULLIF(k.omset, '') AS UNSIGNED), 0) END) as pendapatan_kotor, SUM(CASE WHEN LOWER(k.tipe_shift) = 'partner' THEN IFNULL(CAST(NULLIF(k.total_pengeluaran, '') AS UNSIGNED), 0) / 2 ELSE IFNULL(CAST(NULLIF(k.total_pengeluaran, '') AS UNSIGNED), 0) END) as operasional_mingguan ";
+
 $resTotal = mysqli_query($koneksi, "SELECT COUNT(DISTINCT k.cabang) as total FROM karyawan k JOIN user u ON k.id_user = u.id_user WHERE u.level IN ('karyawan')");
 $totalData = ($resTotal) ? mysqli_fetch_assoc($resTotal)['total'] : 0;
 
-$sqlCountFiltered = "SELECT COUNT(DISTINCT k.cabang) as total " . $sqlBase;
-$resFiltered = mysqli_query($koneksi, $sqlCountFiltered);
+$resFiltered = mysqli_query($koneksi, "SELECT COUNT(DISTINCT k.cabang) as total " . $sqlBase);
 $totalFiltered = ($resFiltered) ? mysqli_fetch_assoc($resFiltered)['total'] : 0;
 
-$sqlData = "SELECT IFNULL(k.cabang, '-') as cabang, SUM(CASE WHEN LOWER(k.tipe_shift) = 'partner' THEN IFNULL(CAST(NULLIF(k.omset, '') AS UNSIGNED), 0) / 2 ELSE IFNULL(CAST(NULLIF(k.omset, '') AS UNSIGNED), 0) END) as pendapatan_kotor, SUM(CASE WHEN LOWER(k.tipe_shift) = 'partner' THEN IFNULL(CAST(NULLIF(k.total_pengeluaran, '') AS UNSIGNED), 0) / 2 ELSE IFNULL(CAST(NULLIF(k.total_pengeluaran, '') AS UNSIGNED), 0) END) as operasional_mingguan " . $sqlBase . " GROUP BY k.cabang ORDER BY cabang ASC LIMIT $start, $length";
+$sqlData = $sqlSelect . $sqlBase . " GROUP BY k.cabang ORDER BY cabang ASC LIMIT $start, $length";
 $resData = mysqli_query($koneksi, $sqlData);
 
 $data = [];
 $no = $start + 1;
 if ($resData) {
     while ($row = mysqli_fetch_assoc($resData)) {
-        $cb = $row['cabang'];
-        $pendapatan_kotor = floatval($row['pendapatan_kotor']);
-        $operasional_mingguan = floatval($row['operasional_mingguan']);
-
-        $qTransfer = "SELECT total_bersih FROM pengeluaran WHERE LOWER(level) = 'transfer'";
-        if (!empty($bulan)) $qTransfer .= " AND MONTH(STR_TO_DATE(tanggal, '%Y-%m-%d')) = '$bulan'";
-        if (!empty($tahun)) $qTransfer .= " AND YEAR(STR_TO_DATE(tanggal, '%Y-%m-%d')) = '$tahun'";
-        if (!empty($cabang)) {
-            $qTransfer .= " AND LOWER(cabang) = LOWER('$cabang')";
-        } else {
-            $qTransfer .= " AND LOWER(cabang) = LOWER('$cb')";
-        }
-        $resTransfer = mysqli_query($koneksi, $qTransfer);
-        $transfer = 0;
-        while ($rT = mysqli_fetch_assoc($resTransfer)) {
-            $transfer += floatval(preg_replace('/[^0-9]/', '', $rT['total_bersih']));
-        }
-        
-        $operasional_mingguan += $transfer;
-
-        $qSewa = "SELECT total_bersih FROM pengeluaran WHERE LOWER(level) = 'sewa'";
-        if (!empty($bulan)) $qSewa .= " AND MONTH(STR_TO_DATE(tanggal, '%Y-%m-%d')) = '$bulan'";
-        if (!empty($tahun)) $qSewa .= " AND YEAR(STR_TO_DATE(tanggal, '%Y-%m-%d')) = '$tahun'";
-        if (!empty($cabang)) {
-            $qSewa .= " AND LOWER(cabang) = LOWER('$cabang')";
-        } else {
-            $qSewa .= " AND LOWER(cabang) = LOWER('$cb')";
-        }
-        $resSewa = mysqli_query($koneksi, $qSewa);
-        $sewa = 0;
-        while ($rS = mysqli_fetch_assoc($resSewa)) {
-            $sewa += floatval(preg_replace('/[^0-9]/', '', $rS['total_bersih']));
-        }
-
-        $qGaji = "SELECT total_bersih FROM pengeluaran WHERE LOWER(level) = 'staff'";
-        if (!empty($bulan)) $qGaji .= " AND MONTH(STR_TO_DATE(tanggal, '%Y-%m-%d')) = '$bulan'";
-        if (!empty($tahun)) $qGaji .= " AND YEAR(STR_TO_DATE(tanggal, '%Y-%m-%d')) = '$tahun'";
-        if (!empty($cabang)) {
-            $qGaji .= " AND LOWER(cabang) = LOWER('$cabang')";
-        } else {
-            $qGaji .= " AND LOWER(cabang) = LOWER('$cb')";
-        }
-        $resGaji = mysqli_query($koneksi, $qGaji);
-        $gaji = 0;
-        while ($rG = mysqli_fetch_assoc($resGaji)) {
-            $gaji += floatval(preg_replace('/[^0-9]/', '', $rG['total_bersih']));
-        }
-
-        $qOpBulanan = "SELECT total_bersih FROM pengeluaran WHERE LOWER(level) IN ('netflix', 'pdam', 'wifi', 'service')";
-        if (!empty($bulan)) $qOpBulanan .= " AND MONTH(STR_TO_DATE(tanggal, '%Y-%m-%d')) = '$bulan'";
-        if (!empty($tahun)) $qOpBulanan .= " AND YEAR(STR_TO_DATE(tanggal, '%Y-%m-%d')) = '$tahun'";
-        if (!empty($cabang)) {
-            $qOpBulanan .= " AND LOWER(cabang) = LOWER('$cabang')";
-        } else {
-            $qOpBulanan .= " AND LOWER(cabang) = LOWER('$cb')";
-        }
-        $resOpBulanan = mysqli_query($koneksi, $qOpBulanan);
-        $operasional_bulanan = 0;
-        while ($rB = mysqli_fetch_assoc($resOpBulanan)) {
-            $operasional_bulanan += floatval(preg_replace('/[^0-9]/', '', $rB['total_bersih']));
-        }
-
-        $total_pengeluaran = $operasional_mingguan + $operasional_bulanan + $sewa + $gaji;
-        $pendapatan_bersih = $pendapatan_kotor - $total_pengeluaran;
-
+        $h = hitungCabang($koneksi, $row, $bulan, $tahun, $levelMingguan, $levelBulanan, $levelSewa, $levelGaji);
         $data[] = [
             "no"                   => $no++,
-            "cabang"               => $cb,
-            "pendapatan_kotor"     => "Rp. " . number_format($pendapatan_kotor, 0, ',', '.'),
-            "operasional_mingguan" => "Rp. " . number_format($operasional_mingguan, 0, ',', '.'),
-            "operasional_bulanan"  => "Rp. " . number_format($operasional_bulanan, 0, ',', '.'),
-            "sewa"                 => "Rp. " . number_format($sewa, 0, ',', '.'),
-            "gaji"                 => "Rp. " . number_format($gaji, 0, ',', '.'),
-            "total_pengeluaran"    => "Rp. " . number_format($total_pengeluaran, 0, ',', '.'),
-            "pendapatan_bersih"    => "Rp. " . number_format($pendapatan_bersih, 0, ',', '.')
+            "cabang"               => $h['cabang'],
+            "pendapatan_kotor"     => rp($h['pendapatan_kotor']),
+            "operasional_mingguan" => rp($h['operasional_mingguan']),
+            "operasional_bulanan"  => rp($h['operasional_bulanan']),
+            "sewa"                 => rp($h['sewa']),
+            "gaji"                 => rp($h['gaji']),
+            "total_pengeluaran"    => rp($h['total_pengeluaran']),
+            "pendapatan_bersih"    => rp($h['pendapatan_bersih'])
         ];
     }
 }
 
-$sqlChartCabang = "SELECT IFNULL(k.cabang, '-') as cabang, SUM(CASE WHEN LOWER(k.tipe_shift) = 'partner' THEN IFNULL(CAST(NULLIF(k.omset, '') AS UNSIGNED), 0) / 2 ELSE IFNULL(CAST(NULLIF(k.omset, '') AS UNSIGNED), 0) END) as pendapatan_kotor, SUM(CASE WHEN LOWER(k.tipe_shift) = 'partner' THEN IFNULL(CAST(NULLIF(k.total_pengeluaran, '') AS UNSIGNED), 0) / 2 ELSE IFNULL(CAST(NULLIF(k.total_pengeluaran, '') AS UNSIGNED), 0) END) as operasional_mingguan FROM karyawan k JOIN user u ON k.id_user = u.id_user WHERE u.level IN ('karyawan')";
+$sqlChartCabang = $sqlSelect . "FROM karyawan k JOIN user u ON k.id_user = u.id_user WHERE u.level IN ('karyawan')";
 if (!empty($bulan)) $sqlChartCabang .= " AND MONTH(k.tanggal) = '$bulan'";
 if (!empty($tahun)) $sqlChartCabang .= " AND YEAR(k.tanggal) = '$tahun'";
 if (!empty($cabang)) $sqlChartCabang .= " AND k.cabang = '$cabang'";
@@ -139,81 +129,7 @@ $resChartCabang = mysqli_query($koneksi, $sqlChartCabang);
 $chartDataCabang = [];
 if ($resChartCabang) {
     while ($rowChart = mysqli_fetch_assoc($resChartCabang)) {
-        $cb = $rowChart['cabang'];
-        $pk = floatval($rowChart['pendapatan_kotor']);
-        $opM = floatval($rowChart['operasional_mingguan']);
-
-        $qTransfer = "SELECT total_bersih FROM pengeluaran WHERE LOWER(level) = 'transfer'";
-        if (!empty($bulan)) $qTransfer .= " AND MONTH(STR_TO_DATE(tanggal, '%Y-%m-%d')) = '$bulan'";
-        if (!empty($tahun)) $qTransfer .= " AND YEAR(STR_TO_DATE(tanggal, '%Y-%m-%d')) = '$tahun'";
-        if (!empty($cabang)) {
-            $qTransfer .= " AND LOWER(cabang) = LOWER('$cabang')";
-        } else {
-            $qTransfer .= " AND LOWER(cabang) = LOWER('$cb')";
-        }
-        $resTransfer = mysqli_query($koneksi, $qTransfer);
-        $transfer = 0;
-        while ($rT = mysqli_fetch_assoc($resTransfer)) {
-            $transfer += floatval(preg_replace('/[^0-9]/', '', $rT['total_bersih']));
-        }
-        
-        $opM += $transfer;
-
-        $qSewa = "SELECT total_bersih FROM pengeluaran WHERE LOWER(level) = 'sewa'";
-        if (!empty($bulan)) $qSewa .= " AND MONTH(STR_TO_DATE(tanggal, '%Y-%m-%d')) = '$bulan'";
-        if (!empty($tahun)) $qSewa .= " AND YEAR(STR_TO_DATE(tanggal, '%Y-%m-%d')) = '$tahun'";
-        if (!empty($cabang)) {
-            $qSewa .= " AND LOWER(cabang) = LOWER('$cabang')";
-        } else {
-            $qSewa .= " AND LOWER(cabang) = LOWER('$cb')";
-        }
-        $resSewa = mysqli_query($koneksi, $qSewa);
-        $sewa = 0;
-        while ($rS = mysqli_fetch_assoc($resSewa)) {
-            $sewa += floatval(preg_replace('/[^0-9]/', '', $rS['total_bersih']));
-        }
-
-        $qGaji = "SELECT total_bersih FROM pengeluaran WHERE LOWER(level) = 'staff'";
-        if (!empty($bulan)) $qGaji .= " AND MONTH(STR_TO_DATE(tanggal, '%Y-%m-%d')) = '$bulan'";
-        if (!empty($tahun)) $qGaji .= " AND YEAR(STR_TO_DATE(tanggal, '%Y-%m-%d')) = '$tahun'";
-        if (!empty($cabang)) {
-            $qGaji .= " AND LOWER(cabang) = LOWER('$cabang')";
-        } else {
-            $qGaji .= " AND LOWER(cabang) = LOWER('$cb')";
-        }
-        $resGaji = mysqli_query($koneksi, $qGaji);
-        $gaji = 0;
-        while ($rG = mysqli_fetch_assoc($resGaji)) {
-            $gaji += floatval(preg_replace('/[^0-9]/', '', $rG['total_bersih']));
-        }
-
-        $qOpBulanan = "SELECT total_bersih FROM pengeluaran WHERE LOWER(level) IN ('netflix', 'pdam', 'wifi', 'service')";
-        if (!empty($bulan)) $qOpBulanan .= " AND MONTH(STR_TO_DATE(tanggal, '%Y-%m-%d')) = '$bulan'";
-        if (!empty($tahun)) $qOpBulanan .= " AND YEAR(STR_TO_DATE(tanggal, '%Y-%m-%d')) = '$tahun'";
-        if (!empty($cabang)) {
-            $qOpBulanan .= " AND LOWER(cabang) = LOWER('$cabang')";
-        } else {
-            $qOpBulanan .= " AND LOWER(cabang) = LOWER('$cb')";
-        }
-        $resOpBulanan = mysqli_query($koneksi, $qOpBulanan);
-        $opB = 0;
-        while ($rB = mysqli_fetch_assoc($resOpBulanan)) {
-            $opB += floatval(preg_replace('/[^0-9]/', '', $rB['total_bersih']));
-        }
-
-        $tp = $opM + $opB + $sewa + $gaji;
-        $pb = $pk - $tp;
-
-        $chartDataCabang[] = [
-            "cabang"               => $cb,
-            "pendapatan_kotor"     => $pk,
-            "operasional_mingguan" => $opM,
-            "operasional_bulanan"  => $opB,
-            "sewa"                 => $sewa,
-            "gaji"                 => $gaji,
-            "total_pengeluaran"    => $tp,
-            "pendapatan_bersih"    => $pb
-        ];
+        $chartDataCabang[] = hitungCabang($koneksi, $rowChart, $bulan, $tahun, $levelMingguan, $levelBulanan, $levelSewa, $levelGaji);
     }
 }
 

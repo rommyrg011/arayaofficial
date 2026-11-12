@@ -76,6 +76,7 @@ if ($resData) {
             "whatsapp"        => $row['whatsapp'],
             "dp"              => $html_dp,
             "durasi"          => $row['durasi'],
+            "jam_berakhir"          => $row['jam_berakhir'],
             "kode_voucher"    => !empty($row['kode_voucher']) ? $row['kode_voucher'] : '-',
             "catatan"         => $row['catatan'],
             "status"          => $row['status']

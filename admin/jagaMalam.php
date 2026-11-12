@@ -6,7 +6,7 @@ if (isset($_GET['hapus_id'])) {
     mysqli_query($koneksi, "DELETE FROM pengeluaran WHERE id_pengeluaran = '$id'");
     
     $_SESSION['notif'] = "Data Berhasil Dihapus";
-    header("Location: netflix");
+    header("Location: jagaMalam");
     exit();
 }
 
@@ -28,7 +28,7 @@ if (isset($_POST['simpanPengeluaran'])) {
         $_SESSION['notif'] = "Data Berhasil Diubah";
     }
     
-    header("Location: netflix");
+    header("Location: jagaMalam");
     exit();
 }
 
@@ -83,7 +83,7 @@ include 'template/topbar.php';
                 </div>
                 <div class="modal-body">
                     <input type="hidden" name="id_pengeluaran" id="id_pengeluaran">
-                    <input type="hidden" name="level" id="level" value="netflix">
+                    <input type="hidden" name="level" id="level" value="jagaMalam">
                     
                     <div class="form-group">
                         <label>Tanggal</label>
@@ -137,7 +137,7 @@ $(document).ready(function() {
         "processing": true,
         "serverSide": true,
         "ajax": {
-            "url": "ajax/knetflix.php",
+            "url": "ajax/kJagaMalam.php",
             "type": "POST"
         },
         "columns": [
@@ -174,7 +174,7 @@ $(document).ready(function() {
         $('#formPengeluaran')[0].reset();
         $('#id_pengeluaran').val('');
         $('#cabang').val('');
-        $('#level').val('netflix');
+        $('#level').val('jagaMalam');
         $('#modalPengeluaran').modal('show');
     });
 
@@ -190,7 +190,7 @@ $(document).ready(function() {
             }
             $('#nama_toko').val(selectedData.nama_staff_ruko);
             $('#total_bersih').val(selectedData.total_bersih);
-            $('#level').val('netflix');
+            $('#level').val('jagaMalam');
             $('#modalPengeluaran').modal('show');
         }
     });
@@ -198,7 +198,7 @@ $(document).ready(function() {
     $('#btnHapus').click(function() {
         if(selectedId) {
             if(confirm('Hapus data pengeluaran ' + selectedData.nama_staff_ruko + '?')) {
-                window.location.href = 'netflix?hapus_id=' + selectedId;
+                window.location.href = 'jagaMalam?hapus_id=' + selectedId;
             }
         }
     });

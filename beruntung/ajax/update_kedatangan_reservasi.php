@@ -1,29 +1,32 @@
 <?php
 require_once __DIR__ . '/../../function.php'; 
 header('Content-Type: application/json');
+date_default_timezone_set('Asia/Makassar');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Tangkap semua data dari data payload AJAX frontend
     $id_reservasi   = isset($_POST['id_reservasi']) ? mysqli_real_escape_string($koneksi, $_POST['id_reservasi']) : '';
     $nama_reservasi = isset($_POST['nama_reservasi']) ? mysqli_real_escape_string($koneksi, $_POST['nama_reservasi']) : '';
     $tgl_bermain    = isset($_POST['tgl_bermain']) ? mysqli_real_escape_string($koneksi, $_POST['tgl_bermain']) : '';
     $ruang          = isset($_POST['ruang']) ? mysqli_real_escape_string($koneksi, $_POST['ruang']) : '';
     $w_kedatangan   = isset($_POST['w_kedatangan']) ? mysqli_real_escape_string($koneksi, $_POST['w_kedatangan']) : '';
     $durasi         = isset($_POST['durasi']) ? mysqli_real_escape_string($koneksi, $_POST['durasi']) : '';
-    
-    // TANGKAP INPUTAN CATATAN BARU DI SINI
     $catatan        = isset($_POST['catatan']) ? mysqli_real_escape_string($koneksi, $_POST['catatan']) : '-';
 
-    // Validasi parameter wajib (catatan tidak masuk di sini karena opsional/boleh kosong)
     if (!empty($id_reservasi) && !empty($nama_reservasi) && !empty($tgl_bermain) && !empty($ruang) && !empty($w_kedatangan) && !empty($durasi)) {
         
-        // Memasukkan nama_reservasi, ruang, dan catatan ke query UPDATE
+        $waktu_bersih = str_replace(' WITA', '', $w_kedatangan);
+        $angka_durasi = intval($durasi);
+        $timestamp_kedatangan = strtotime($waktu_bersih);
+        $timestamp_berakhir = $timestamp_kedatangan + ($angka_durasi * 3600);
+        $jam_berakhir = date('H:i', $timestamp_berakhir) . " WITA";
+
         $query = "UPDATE reservasi SET 
                     nama_reservasi = '$nama_reservasi', 
                     tgl_bermain = '$tgl_bermain', 
                     ruang = '$ruang', 
                     w_kedatangan = '$w_kedatangan', 
                     durasi = '$durasi',
+                    jam_berakhir = '$jam_berakhir',
                     catatan = '$catatan' 
                   WHERE id_reservasi = '$id_reservasi'";
                   

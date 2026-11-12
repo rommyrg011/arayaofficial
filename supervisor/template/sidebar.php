@@ -59,11 +59,14 @@
         <div id="pengeluaran" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <a class="collapse-item" href="<?= asset('supervisor/adminTransfer'); ?>">Admin Transfer</a>
+                <a class="collapse-item" href="<?= asset('supervisor/jagaMalam'); ?>">Jaga Malam</a>
+                <a class="collapse-item" href="<?= asset('supervisor/listrik'); ?>">Listrik</a>
                 <a class="collapse-item" href="<?= asset('supervisor/netflix'); ?>">Netflix</a>
                 <a class="collapse-item" href="<?= asset('supervisor/pdam'); ?>">PDAM</a>
                 <a class="collapse-item" href="<?= asset('supervisor/wifi'); ?>">Wifi</a>
                 <a class="collapse-item" href="<?= asset('supervisor/service'); ?>">Service</a>
                 <a class="collapse-item" href="<?= asset('supervisor/pengeluaranSewa'); ?>">Sewa Toko</a>
+                <a class="collapse-item" href="<?= asset('supervisor/lainnya'); ?>">Lainnya</a>
             </div>
         </div>
     </li>

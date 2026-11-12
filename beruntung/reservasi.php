@@ -56,8 +56,6 @@ include 'template/topbar.php';
                             <a class="dropdown-item filter-pilih-ruang" data-ruang="Reguler">Reguler</a>
                             <a class="dropdown-item filter-pilih-ruang" data-ruang="VIP 1">VIP 1</a>
                             <a class="dropdown-item filter-pilih-ruang" data-ruang="VIP 2">VIP 2</a>
-                            <a class="dropdown-item filter-pilih-ruang" data-ruang="PREMIERE 1">PREMIERE 1</a>
-                            <a class="dropdown-item filter-pilih-ruang" data-ruang="PREMIERE 2">PREMIERE 2</a>
                         </div>
                     </div>
                 </div>
@@ -77,6 +75,7 @@ include 'template/topbar.php';
                             <th>Tambahan</th>
                             <th>Kedatangan</th>
                             <th>Durasi</th>
+                            <th>Jam Berakhir</th>
                             <th>Kode Voucher</th>
                             <th>Whatsapp</th>
                             <th>Dp</th>
@@ -244,6 +243,7 @@ $(document).ready(function() {
             { "data": "tambahan", "className": "text-center" },
             { "data": "w_kedatangan", "className": "text-center" },
             { "data": "durasi", "className": "text-center" },
+            { "data": "jam_berakhir", "className": "text-center" },
             { "data": "kode_voucher", "className": "text-center font-weight-bold text-success" },
             { "data": "whatsapp", "className": "text-center" },
             { "data": "dp", "className": "text-center" },
@@ -434,9 +434,17 @@ $(document).ready(function() {
         var namaBaru = $('#ubah_nama_pelanggan').val();
         var tglBaru = $('#ubah_tgl_bermain').val();
         var ruangBaru = $('#ubah_ruang').val();
-        var jamBaru = $('#ubah_w_kedatangan').val() + ' WITA'; 
+        var jamInput = $('#ubah_w_kedatangan').val();
+        var jamBaru = jamInput + ' WITA'; 
         var durasiBaru = $('#ubah_durasi').val();
         var catatanBaru = $('#ubah_catatan').val();
+
+        var angkaDurasi = parseInt(durasiBaru) || 0;
+        var parts = jamInput.split(':');
+        var jamKedatanganDate = new Date();
+        jamKedatanganDate.setHours(parseInt(parts[0], 10), parseInt(parts[1], 10), 0, 0);
+        jamKedatanganDate.setHours(jamKedatanganDate.getHours() + angkaDurasi);
+        var jamBerakhirBaru = ('0' + jamKedatanganDate.getHours()).slice(-2) + ':' + ('0' + jamKedatanganDate.getMinutes()).slice(-2) + ' WITA';
 
         $.ajax({
             url: 'ajax/update_kedatangan_reservasi.php', 
@@ -448,6 +456,7 @@ $(document).ready(function() {
                 ruang: ruangBaru,
                 w_kedatangan: jamBaru,
                 durasi: durasiBaru,
+                jam_berakhir: jamBerakhirBaru,
                 catatan: catatanBaru
             },
             dataType: 'json',
@@ -488,7 +497,7 @@ $(document).ready(function() {
                     },
                     dataType: 'json',
                     success: function(response) {
-                        $('#btnHapusData').html('<i class="fas fa-trash"></i> Hapus Data');
+                        $('#btnHapusData').html('<i class="fas fa-times"></i> Pembatalan');
                         if(response.status === true) {
                             var alertSukses = '<div class="alert alert-success alert-dismissible fade show alert-fixed">' +
                                               '<strong>Sukses!</strong> Data pelanggan ' + selectedRowData.nama_reservasi + ' berhasil dihapus.' +
@@ -504,7 +513,7 @@ $(document).ready(function() {
                         hilangkanAlertOtomatis();
                     },
                     error: function(xhr) {
-                        $('#btnHapusData').prop('disabled', false).html('<i class="fas fa-trash"></i> Hapus Data');
+                        $('#btnHapusData').prop('disabled', false).html('<i class="fas fa-times"></i> Pembatalan');
                         alert("Terjadi kegagalan komunikasi data dengan server.");
                     }
                 });

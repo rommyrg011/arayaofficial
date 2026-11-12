@@ -6,7 +6,7 @@ if (isset($_GET['hapus_id'])) {
     mysqli_query($koneksi, "DELETE FROM pengeluaran WHERE id_pengeluaran = '$id'");
     
     $_SESSION['notif'] = "Data Berhasil Dihapus";
-    header("Location: adminTransfer.php");
+    header("Location: listrik");
     exit();
 }
 
@@ -30,7 +30,7 @@ if (isset($_POST['simpanPengeluaran'])) {
         $_SESSION['notif'] = "Data Berhasil Diubah";
     }
     
-    header("Location: adminTransfer.php");
+    header("Location: listrik");
     exit();
 }
 
@@ -85,7 +85,7 @@ include 'template/topbar.php';
                 </div>
                 <div class="modal-body">
                     <input type="hidden" name="id_pengeluaran" id="id_pengeluaran">
-                    <input type="hidden" name="level" id="level" value="transfer">
+                    <input type="hidden" name="level" id="level" value="listrik">
                     
                     <div class="form-group row">
                         <div class="col-md-6">
@@ -184,7 +184,7 @@ $(document).ready(function() {
         $('#tanggal_awal').val('');
         $('#tanggal_akhir').val('');
         $('#cabang').val('');
-        $('#level').val('transfer');
+        $('#level').val('listrik');
         $('#modalPengeluaran').modal('show');
     });
 
@@ -210,7 +210,7 @@ $(document).ready(function() {
             }
             $('#nama_toko').val(selectedData.nama_staff_ruko);
             $('#total_bersih').val(selectedData.total_bersih);
-            $('#level').val('transfer');
+            $('#level').val('listrik');
             $('#modalPengeluaran').modal('show');
         }
     });
@@ -218,7 +218,7 @@ $(document).ready(function() {
     $('#btnHapus').click(function() {
         if(selectedId) {
             if(confirm('Hapus data pengeluaran ' + selectedData.nama_staff_ruko + '?')) {
-                window.location.href = 'adminTransfer.php?hapus_id=' + selectedId;
+                window.location.href = 'listrik?hapus_id=' + selectedId;
             }
         }
     });

@@ -30,10 +30,10 @@ $start  = isset($_POST['start']) ? intval($_POST['start']) : 0;
 $length = isset($_POST['length']) ? intval($_POST['length']) : 10;
 $search = isset($_POST['search']['value']) ? mysqli_real_escape_string($koneksi, $_POST['search']['value']) : '';
 
-$resTotal = mysqli_query($koneksi, "SELECT COUNT(*) as total FROM pengeluaran WHERE level='transfer'");
+$resTotal = mysqli_query($koneksi, "SELECT COUNT(*) as total FROM pengeluaran WHERE level='listrik'");
 $totalData = ($resTotal) ? mysqli_fetch_assoc($resTotal)['total'] : 0;
 
-$sqlBase = "FROM pengeluaran WHERE level='transfer'";
+$sqlBase = "FROM pengeluaran WHERE level='listrik'";
 if (!empty($search)) {
     $sqlBase .= " AND (nama_staff_ruko LIKE '%$search%' OR tanggal LIKE '%$search%' OR cabang LIKE '%$search%')";
 }

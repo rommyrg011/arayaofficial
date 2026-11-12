@@ -40,16 +40,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $waktu_input     = mysqli_real_escape_string($koneksi, $_POST['waktu_kedatangan']);
     $w_kedatangan    = $waktu_input . " WITA"; 
     $durasi          = mysqli_real_escape_string($koneksi, $_POST['durasi']);
+    
     $wa_input        = trim($_POST['whatsapp']);
     $whatsapp        = empty($wa_input) ? "-" : mysqli_real_escape_string($koneksi, $wa_input);
+    
+    $proses_database = true;
+
+    if (strlen($wa_input) < 11) {
+        $proses_database = false;
+        $gagal_kirim = true;
+        $pesan_error = "Nomor WhatsApp wajib diisi minimal 11 digit!";
+    }
+
+    $angka_durasi = intval($durasi);
+    $timestamp_kedatangan = strtotime($waktu_input);
+    $timestamp_berakhir = $timestamp_kedatangan + ($angka_durasi * 3600);
+    $jam_berakhir_format = date('H:i', $timestamp_berakhir) . " WITA";
+
     $catatan_input   = trim($_POST['catatan']);
     $catatan         = empty($catatan_input) ? "-" : mysqli_real_escape_string($koneksi, $catatan_input);
     $status          = "Pending"; 
     $input_voucher   = strtoupper(trim($_POST['kode_voucher']));
     $kode_voucher    = empty($input_voucher) ? NULL : mysqli_real_escape_string($koneksi, $input_voucher);
-    $proses_database = true;
 
-    if (!empty($kode_voucher)) {
+    if ($proses_database && !empty($kode_voucher)) {
         $cek_voucher = mysqli_query($koneksi, "SELECT * FROM customer_vouchers WHERE kode_voucher = '$kode_voucher'");
         
         if (mysqli_num_rows($cek_voucher) > 0) {
@@ -146,8 +160,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($proses_database && $proses_upload) {
         $val_voucher = $kode_voucher ? "'$kode_voucher'" : "NULL";
 
-        $query = "INSERT INTO reservasi (cabang, nama_reservasi, tgl_bermain, ruang, jml_orang, tambahan, w_kedatangan, durasi, whatsapp, dp, catatan, status, kode_voucher) 
-                  VALUES ('$cabang', '$nama_reservasi', '$tgl_bermain', '$ruang', '$jml_orang', '$tambahan', '$w_kedatangan', '$durasi', '$whatsapp', '$nama_file_baru', '$catatan', '$status', $val_voucher)";
+        $query = "INSERT INTO reservasi (cabang, nama_reservasi, tgl_bermain, ruang, jml_orang, tambahan, w_kedatangan, durasi, jam_berakhir, whatsapp, dp, catatan, status, kode_voucher) 
+                  VALUES ('$cabang', '$nama_reservasi', '$tgl_bermain', '$ruang', '$jml_orang', '$tambahan', '$w_kedatangan', '$durasi', '$jam_berakhir_format', '$whatsapp', '$nama_file_baru', '$catatan', '$status', $val_voucher)";
         
         if (mysqli_query($koneksi, $query)) {
             if (!empty($kode_voucher)) {
@@ -237,7 +251,7 @@ $bulan_id = array('01' => 'Januari', '02' => 'Februari', '03' => 'Maret', '04' =
                                 <div class="row g-1 text-secondary">
                                     <div class="col-6"><i class="fas fa-map-pin"></i> <?= htmlspecialchars($row['ruang']); ?></div>
                                     <div class="col-6"><i class="fas fa-calendar"></i> <?= htmlspecialchars($tanggal_indo); ?></div>
-                                    <div class="col-6"><i class="fas fa-clock"></i> <?= htmlspecialchars($row['w_kedatangan']); ?></div>
+                                    <div class="col-6"><i class="fas fa-clock"></i> <?= htmlspecialchars($row['w_kedatangan']); ?> - <?= htmlspecialchars($row['jam_berakhir']); ?></div>
                                     <div class="col-6"><i class="fas fa-user"></i> <?= htmlspecialchars($row['jml_orang']); ?> Org (<?= htmlspecialchars($row['durasi']); ?>)</div>
                                 </div>
                             </div>
@@ -269,7 +283,7 @@ $bulan_id = array('01' => 'Januari', '02' => 'Februari', '03' => 'Maret', '04' =
                                 <div class="row g-1 text-secondary">
                                     <div class="col-6"><i class="fas fa-map-pin"></i> <?= htmlspecialchars($row['ruang']); ?></div>
                                     <div class="col-6"><i class="fas fa-calendar"></i> <?= htmlspecialchars($tanggal_indo); ?></div>
-                                    <div class="col-6"><i class="fas fa-clock"></i> <?= htmlspecialchars($row['w_kedatangan']); ?></div>
+                                    <div class="col-6"><i class="fas fa-clock"></i> <?= htmlspecialchars($row['w_kedatangan']); ?> - <?= htmlspecialchars($row['jam_berakhir']); ?></div>
                                     <div class="col-6"><i class="fas fa-user"></i> <?= htmlspecialchars($row['jml_orang']); ?> Org (<?= htmlspecialchars($row['durasi']); ?>)</div>
                                 </div>
                             </div>
@@ -348,7 +362,7 @@ $bulan_id = array('01' => 'Januari', '02' => 'Februari', '03' => 'Maret', '04' =
 
                         <div class="col-12">
                             <label for="whatsapp" class="form-label-sm">Nomor WhatsApp (Aktif)</label>
-                            <input type="number" id="whatsapp" name="whatsapp" class="form-control form-control-sm" placeholder="08xxx">
+                            <input type="number" id="whatsapp" name="whatsapp" class="form-control form-control-sm" placeholder="08xxx" minlength="11" required>
                         </div>   
                         
                         <div class="col-12">
@@ -418,6 +432,7 @@ $bulan_id = array('01' => 'Januari', '02' => 'Februari', '03' => 'Maret', '04' =
     const infoOrang = document.getElementById('info_jumlah_orang');
     const selectMikrofon = document.getElementById('mikrofon');
     const grupMikrofon = document.getElementById('grup_mikrofon');
+    const inputWhatsapp = document.getElementById('whatsapp');
 
     let nominalDiskon = 0;
     let hargaStandar = 0;
@@ -630,6 +645,14 @@ $bulan_id = array('01' => 'Januari', '02' => 'Februari', '03' => 'Maret', '04' =
     selectDurasi.addEventListener('change', hitungBiayaRealtime);
     inputJumlahOrang.addEventListener('input', hitungBiayaRealtime);
     selectMikrofon.addEventListener('change', hitungBiayaRealtime);
+
+    inputWhatsapp.addEventListener('input', function() {
+        if (this.value.length < 11) {
+            this.setCustomValidity("Nomor whatsApp tidak terdaftar.");
+        } else {
+            this.setCustomValidity("");
+        }
+    });
 
     inputVoucher.addEventListener('input', function() {
         const kode = this.value.trim();

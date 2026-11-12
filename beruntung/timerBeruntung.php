@@ -81,6 +81,8 @@ include 'template/topbar.php';
     
     .card-timer-merah { background-color: #e74a3b !important; color: #ffffff !important; }
     .card-timer-merah .timer-title, .card-timer-merah .display-time { color: #ffffff !important; }
+
+    .card-timer-nonaktif { background-color: #333333 !important; color: #888888 !important; opacity: 0.7; }
 </style>
 
 <?php 
@@ -145,7 +147,7 @@ function renderCard(id) {
                             ${formatTime(t.timeLeft)}
                         </div>
                     </div>
-                    <div class="form-group mb-3">
+                    <div class="form-group mb-2">
                         <select class="form-control text-dark" style="height: 30px; padding: 0 8px; font-size: 12px; border-radius: 4px;" id="paket-${id}">
                             <option value="180">3 Menit</option>
                             <option value="600">10 Menit</option>
@@ -162,13 +164,17 @@ function renderCard(id) {
                             <option value="36300">10 Jam</option>
                         </select>
                     </div>
-                    <div class="d-flex justify-content-between mb-2">
-                        <button class="btn btn-success flex-fill mr-1 font-weight-bold" style="padding: 6px 0; font-size: 12px; border-radius: 4px;" id="start-${id}" onclick="startTimer('${id}')">Mulai</button>
-                        <button class="btn flex-fill ml-1 text-white font-weight-bold" style="padding: 6px 0; font-size: 12px; background-color: #d4a34b; border-color: #d4a34b; border-radius: 4px;" id="pause-${id}" onclick="pauseTimer('${id}')">Jeda</button>
+                    <div class="d-flex justify-content-between mb-1">
+                        <button class="btn btn-success flex-fill mr-1 font-weight-bold" style="padding: 5px 0; font-size: 11px; border-radius: 4px;" id="start-${id}" onclick="startTimer('${id}')">Mulai</button>
+                        <button class="btn flex-fill ml-1 text-white font-weight-bold" style="padding: 5px 0; font-size: 11px; background-color: #d4a34b; border-color: #d4a34b; border-radius: 4px;" id="pause-${id}" onclick="pauseTimer('${id}')">Jeda</button>
+                    </div>
+                    <div class="d-flex justify-content-between mb-1">
+                        <button class="btn btn-info flex-fill mr-1 font-weight-bold text-white" style="padding: 5px 0; font-size: 11px; border-radius: 4px;" id="add-time-${id}" onclick="addTimePrompt('${id}')"><i class="fas fa-plus"></i> Waktu</button>
+                        <button class="btn btn-danger flex-fill ml-1 font-weight-bold" style="padding: 5px 0; font-size: 11px; border-radius: 4px;" onclick="resetTimer('${id}')">Reset</button>
                     </div>
                     <div class="d-flex justify-content-between">
-                        <button class="btn btn-info flex-fill mr-1 font-weight-bold text-white" style="padding: 6px 0; font-size: 12px; border-radius: 4px;" id="add-time-${id}" onclick="addTimePrompt('${id}')"><i class="fas fa-plus"></i> Waktu</button>
-                        <button class="btn btn-danger flex-fill ml-1 font-weight-bold" style="padding: 6px 0; font-size: 12px; border-radius: 4px;" onclick="resetTimer('${id}')">Reset</button>
+                        <button class="btn btn-secondary flex-fill mr-1 font-weight-bold" style="padding: 5px 0; font-size: 11px; border-radius: 4px;" id="btn-toggle-${id}" onclick="toggleActiveTable('${id}')">Nonaktifkan</button>
+                        <button class="btn btn-warning flex-fill ml-1 font-weight-bold text-dark" style="padding: 5px 0; font-size: 11px; border-radius: 4px;" id="btn-pindah-${id}" onclick="pindahMejaPrompt('${id}')">Pindah Meja</button>
                     </div>
                 </div>
             </div>
@@ -234,9 +240,11 @@ function updateCardColor(id) {
     const t = timers[id];
     if(!t) return;
     const card = $(`#card-${id} .card`);
-    card.removeClass('card-timer-hitam card-timer-putih card-timer-kuning card-timer-merah border-left-primary border-left-success border-left-warning border-left-danger');
+    card.removeClass('card-timer-hitam card-timer-putih card-timer-kuning card-timer-merah card-timer-nonaktif border-left-primary border-left-success border-left-warning border-left-danger border-left-secondary');
     
-    if (t.isFinished) {
+    if (!t.isActive) {
+        card.addClass('card-timer-nonaktif border-left-secondary');
+    } else if (t.isFinished) {
         card.addClass('card-timer-merah border-left-danger');
     } else if (t.isRunning) {
         card.addClass('card-timer-putih border-left-success');
@@ -254,16 +262,25 @@ function updateUI(id) {
     $(`#display-${id}`).text(formatTime(t.timeLeft));
     $(`#paket-${id}`).val(t.paket);
 
-    if (t.isRunning) {
+    if (!t.isActive) {
         $(`#paket-${id}`).prop('disabled', true);
         $(`#start-${id}`).prop('disabled', true);
-        $(`#pause-${id}`).prop('disabled', false);
-        $(`#add-time-${id}`).prop('disabled', false);
-    } else {
-        $(`#paket-${id}`).prop('disabled', t.timeLeft > 0);
-        $(`#start-${id}`).prop('disabled', false).text(t.timeLeft > 0 ? 'Lanjut' : 'Mulai');
         $(`#pause-${id}`).prop('disabled', true);
-        $(`#add-time-${id}`).prop('disabled', !(t.timeLeft > 0));
+        $(`#add-time-${id}`).prop('disabled', true);
+        $(`#btn-toggle-${id}`).text('Aktifkan').removeClass('btn-secondary').addClass('btn-success');
+    } else {
+        $(`#btn-toggle-${id}`).text('Nonaktifkan').removeClass('btn-success').addClass('btn-secondary');
+        if (t.isRunning) {
+            $(`#paket-${id}`).prop('disabled', true);
+            $(`#start-${id}`).prop('disabled', true);
+            $(`#pause-${id}`).prop('disabled', false);
+            $(`#add-time-${id}`).prop('disabled', false);
+        } else {
+            $(`#paket-${id}`).prop('disabled', t.timeLeft > 0);
+            $(`#start-${id}`).prop('disabled', false).text(t.timeLeft > 0 ? 'Lanjut' : 'Mulai');
+            $(`#pause-${id}`).prop('disabled', true);
+            $(`#add-time-${id}`).prop('disabled', !(t.timeLeft > 0));
+        }
     }
     
     updateCardColor(id);
@@ -284,12 +301,14 @@ function syncData() {
             if (dbT.cabang !== 'beruntung') continue;
 
             const isRunning = (dbT.isRunning == 1 || dbT.isRunning === true || dbT.isRunning === 'true');
+            const isActive = (dbT.isActive == 1 || dbT.isActive === true || dbT.isActive === 'true');
 
             if (!timers[id]) {
                 dbT.paket = parseInt(dbT.paket);
                 dbT.endTime = parseInt(dbT.endTime);
                 dbT.timeLeft = parseInt(dbT.timeLeft);
                 dbT.isRunning = isRunning; 
+                dbT.isActive = isActive;
                 dbT.isFinished = false;
 
                 timers[id] = dbT;
@@ -300,12 +319,13 @@ function syncData() {
                 if (pendingUpdates.has(id)) continue;
                 
                 timers[id].paket = parseInt(dbT.paket);
+                timers[id].isActive = isActive;
                 
                 if (!timers[id].isRunning || !isRunning) {
                     timers[id].endTime = parseInt(dbT.endTime);
                 }
                 
-                if (timers[id].isRunning != isRunning || (timers[id].timeLeft != parseInt(dbT.timeLeft) && !isRunning)) {
+                if (timers[id].isRunning != isRunning || timers[id].isActive != isActive || (timers[id].timeLeft != parseInt(dbT.timeLeft) && !isRunning)) {
                     timers[id].isRunning = isRunning;
                     timers[id].timeLeft = parseInt(dbT.timeLeft);
                     updateUI(id);
@@ -350,6 +370,66 @@ function saveTimerToDB(id) {
         pendingUpdates.delete(id);
     });
 }
+
+window.toggleActiveTable = function(id) {
+    const t = timers[id];
+    const newStatus = t.isActive ? 0 : 1;
+
+    $.post(API_URL, {
+        action: 'toggle_active',
+        id_timer: id,
+        is_active: newStatus
+    }, function() {
+        t.isActive = (newStatus === 1);
+        updateUI(id);
+    });
+};
+
+window.pindahMejaPrompt = function(idSumber) {
+    const tSumber = timers[idSumber];
+    if (tSumber.timeLeft <= 0 && !tSumber.isRunning) {
+        Swal.fire('Gagal', 'Meja ini tidak memiliki waktu aktif yang bisa dipindahkan!', 'error');
+        return;
+    }
+
+    let options = {};
+    for (const id in timers) {
+        if (timers[id].cabang === 'beruntung' && id !== idSumber && timers[id].isActive) {
+            options[id] = `Meja ${timers[id].noMeja} (${timers[id].judulMeja})`;
+        }
+    }
+
+    if (Object.keys(options).length === 0) {
+        Swal.fire('Informasi', 'Tidak ada meja lain yang aktif/tersedia untuk dipindahkan.', 'info');
+        return;
+    }
+
+    Swal.fire({
+        title: `Pindah Waktu dari Meja ${tSumber.noMeja}`,
+        html: 'Pilih meja tujuan:',
+        input: 'select',
+        inputOptions: options,
+        inputPlaceholder: '-- Pilih Meja Tujuan --',
+        showCancelButton: true,
+        confirmButtonText: 'Pindahkan',
+        cancelButtonText: 'Batal',
+        inputValidator: (val) => {
+            if (!val) return 'Anda harus memilih meja tujuan!';
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            const idTujuan = result.value;
+            $.post(API_URL, {
+                action: 'pindah_meja',
+                id_sumber: idSumber,
+                id_tujuan: idTujuan
+            }, function() {
+                syncData();
+                Swal.fire('Berhasil!', 'Waktu berhasil dipindahkan ke meja tujuan.', 'success');
+            });
+        }
+    });
+};
 
 function handleTimerFinish(id) {
     const t = timers[id];
@@ -438,7 +518,7 @@ $('#btnSaveTimer').click(function() {
 
 window.startTimer = function(id) {
     const t = timers[id];
-    if(t.isRunning) return;
+    if(t.isRunning || !t.isActive) return;
     
     t.isFinished = false;
     
@@ -488,14 +568,6 @@ window.resetTimer = function(id) {
             
             updateUI(id);
             saveTimerToDB(id); 
-            
-            Swal.fire({
-                icon: 'success',
-                title: 'Direset!',
-                text: 'Waktu berhasil dikembalikan ke awal.',
-                timer: 1500,
-                showConfirmButton: false
-            });
         }
     });
 };
@@ -544,10 +616,7 @@ window.addTimePrompt = function(id) {
         confirmButtonText: 'Tambahkan',
         cancelButtonText: 'Batal',
         inputValidator: (value) => {
-            return new Promise((resolve) => {
-                if (value) resolve();
-                else resolve('Anda harus memilih durasi waktu terlebih dahulu!');
-            });
+            if (!value) return 'Anda harus memilih durasi waktu terlebih dahulu!';
         }
     }).then((result) => {
         if (result.isConfirmed) {
@@ -567,14 +636,6 @@ window.addExtraTime = function(id, extraSeconds) {
     
     updateUI(id);
     saveTimerToDB(id);
-    
-    Swal.fire({
-        icon: 'success',
-        title: 'Berhasil!',
-        text: 'Waktu berhasil ditambahkan ke Perangkat.',
-        timer: 1500,
-        showConfirmButton: false
-    });
 };
 
 $(document).ready(function() {
